@@ -15,7 +15,7 @@ like dialyzer (but you probably already know this, since you are here! :D).
 The problem of using dialyzer directly is that we cannot leverage its power to offer to the developer a great experience.
 Let me explain briefly over that: dialyzer is awesome, but it has some major flaws:
 - Incredibly slow (order of minutes, no good!)
-- Crypting error messages (at best...)
+- Crypting error messages
 - Somewhat hard to configure correctly (not as straightforward as one would like it to be)
 
 The proposed solution here is to develop a mix task that should resolve all the flaws showed above:
@@ -23,17 +23,21 @@ The proposed solution here is to develop a mix task that should resolve all the 
 - First class error messages (ansii colored, long/short variant, elm/credo style)
 - Dead easy to run (`mix dialyzer` should be used in the 99% of the cases)
 
+I know this will not be easy and I'll encounter a lot of problems on the road, so any help and/or
+suggestion is really welcomed!
+
 The final goal is to merge this project into elixir itself! :D
 (For some more infos, go here: https://summerofcode.withgoogle.com/projects/#4978058864361472)
 
 # Difference from other projects
 
-Nothing, and everything.
+**First of all, I would like to thank you the contributor to all the existing projects that already exists!
+Without you this would be even more difficult than what already is.**
 
 The goal of this project is to learn how the other existing solutions tried to implement dialyzer for elixir,
-take the good parts and implement them, then take the bad parts and improve over them.
+take the good parts and implement them, then take the bad parts and try to improve over them.
 
-The truth is that there are already a few libraries for interfacing with dialyzer, the problem is that some of them are
+There are already a few libraries for interfacing with dialyzer, the problem is that some of them are
 not maintained anymore, even though they had some good ideas at their core:
 
 - https://github.com/jeremyjh/dialyxir:
@@ -41,7 +45,7 @@ not maintained anymore, even though they had some good ideas at their core:
 
   **pro**:
     - Most of the features implemented
-    - Good implementation, overall
+    - Good implementation
 
   **cons**:
     - Some technical debt over the past versions/years
@@ -63,8 +67,8 @@ not maintained anymore, even though they had some good ideas at their core:
 # Why
 
 Soooo... Here are some general points to answer to your nice questions:
-- **Why not contribute to another project**: 
-  
+- **Why not contribute to another project**:
+
   Since the goal of this project is to be merged into core elixir, it's better to start from scratch and develop everything
   with this goal in mind. We do not want technical debt and need pretty much a lot of features that currently are divided into
   separated projects.
@@ -72,12 +76,12 @@ Soooo... Here are some general points to answer to your nice questions:
   On top of this, I can act freely and break things when I want, the dream of any developer :D
 
 - **Don't you have a social life? Why are you doing this to yourself!**:
-  
+
   First of all: I know it sounds strange, but I really enjoy creating stuff! And it gets even better when you are paid to do so!
   For those who don't know, this is going to be a project under the Google Summer of Code (https://summerofcode.withgoogle.com/).
 
   Second: I'll be working on something I've really wanted for a long time to be present in elixir!
 
-  Third: This summer I'm gonna experiment with being a digital nomad while working: 
-  I would like to travel to Istanbul, Bali and Hanoi (we'll see about other places, but if you are from one of those, write me! 
+  Third: This summer I'm gonna experiment with being a digital nomad while working:
+  I would like to travel to Istanbul, Bali and Hanoi (we'll see about other places, but if you are from one of those, write me!
   We can always meet for a beer and chat about how awesome elixir is - and else! :D)
