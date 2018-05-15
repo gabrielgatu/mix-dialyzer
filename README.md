@@ -15,7 +15,7 @@ like dialyzer (but you probably already know this, since you are here! :D).
 The problem of using dialyzer directly is that we cannot leverage its power to offer to the developer a great experience.
 Let me explain briefly over that: dialyzer is awesome, but it has some major flaws:
 - Incredibly slow (order of minutes, no good!)
-- Crypting error messages
+- Cryptic error messages
 - Somewhat hard to configure correctly (not as straightforward as one would like it to be)
 
 The proposed solution here is to develop a mix task that should resolve all the flaws showed above:
