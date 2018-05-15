@@ -3,7 +3,7 @@
 Elixir has matured a lot in the last years! And in the newer versions we are continually seeing an increasing focus on
 project productivity tools, like error diffs, mix xref, exception blame and code formatter.
 
-Altough all of this is already amazing, and it allows us to write nice and correct (mosty) programs, elixir is still
+Although all of this is already amazing, and it allows us to write nice and correct (mosty) programs, elixir is still
 a dynamic programming language, and even though it let's you quickly iterate from an idea to a prototype,
 it doesn't make you feel so confident when working on a large scale project.
 
@@ -15,7 +15,7 @@ like dialyzer (but you probably already know this, since you are here! :D).
 The problem of using dialyzer directly is that we cannot leverage its power to offer to the developer a great experience.
 Let me explain briefly over that: dialyzer is awesome, but it has some major flaws:
 - Incredibly slow (order of minutes, no good!)
-- Crypting error messages
+- Cryptic error messages
 - Somewhat hard to configure correctly (not as straightforward as one would like it to be)
 
 The proposed solution here is to develop a mix task that should resolve all the flaws showed above:
