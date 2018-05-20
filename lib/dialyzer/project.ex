@@ -1,4 +1,13 @@
 defmodule Dialyzer.Project do
+
+  @doc """
+  Get the name of the current application
+  """
+  @spec application() :: atom
+  def application do
+    Mix.Project.get().project()[:app]
+  end
+
   @doc """
   Return all the dependencies (direct or indirect) of this project.
   """

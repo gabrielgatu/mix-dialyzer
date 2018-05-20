@@ -25,3 +25,5 @@ dialyzer-*.tar
 # Ignore project level files
 /.elixir_ls
 /.vscode
+
+notes.md

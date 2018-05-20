@@ -21,8 +21,7 @@ defmodule Dialyzer.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:cowboy, "~> 2.4"},
-      # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
+      {:cowboy, "~> 2.4"}
     ]
   end
 end
