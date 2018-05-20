@@ -3,7 +3,7 @@
 Elixir has matured a lot in the last years! And in the newer versions we are continually seeing an increasing focus on
 project productivity tools, like error diffs, mix xref, exception blame and code formatter.
 
-Altough all of this is already amazing, and it allows us to write nice and correct (mosty) programs, elixir is still
+Although all of this is already amazing, and it allows us to write nice and correct (mosty) programs, elixir is still
 a dynamic programming language, and even though it let's you quickly iterate from an idea to a prototype,
 it doesn't make you feel so confident when working on a large scale project.
 
