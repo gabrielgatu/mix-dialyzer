@@ -22,8 +22,10 @@ defmodule Dialyzer.Plt do
       changes = Plt.Manifest.changes()
       plt = generate_deps_plt_path()
 
-      removed_files = Enum.flat_map(changes[:apps][:removed] ++ changes[:apps][:changed], &(&1.files))
-      added_files = Enum.flat_map(changes[:apps][:changed] ++ changes[:apps][:added], &(&1.files))
+      removed_files =
+        Enum.flat_map(changes[:apps][:removed] ++ changes[:apps][:changed], & &1.files)
+
+      added_files = Enum.flat_map(changes[:apps][:changed] ++ changes[:apps][:added], & &1.files)
 
       Plt.Command.plt_remove(plt, removed_files)
       Plt.Command.plt_add(plt, added_files)
@@ -51,20 +53,20 @@ defmodule Dialyzer.Plt do
 
   # Checks that the 3 plts exists. If not, it generates again
   # all 3 of them.
-  @spec ensure_plt_created() ::  none
+  @spec ensure_plt_created() :: none
   defp ensure_plt_created do
     [generate_erlang_plt_path(), generate_elixir_plt_path(), generate_deps_plt_path()]
     |> Enum.all?(&File.exists?/1)
     |> unless do
-      Logger.info("Creating plts for the first time")
+         Logger.info("Creating plts for the first time")
 
-      Project.dependencies()
-      |> Kernel.++([Project.application()])
-      |> plts_list()
-      |> check_plts()
+         Project.dependencies()
+         |> Kernel.++([Project.application()])
+         |> plts_list()
+         |> check_plts()
 
-      Plt.Manifest.update()
-    end
+         Plt.Manifest.update()
+       end
   end
 
   # Generates a list of 3 elements.

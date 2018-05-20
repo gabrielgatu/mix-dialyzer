@@ -1,5 +1,4 @@
 defmodule Dialyzer.Project do
-
   @doc """
   Get the name of the current application
   """

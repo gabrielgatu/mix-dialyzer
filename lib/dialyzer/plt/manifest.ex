@@ -11,7 +11,9 @@ defmodule Dialyzer.Plt.Manifest do
     {apps_removed, apps_changed} =
       Enum.reduce(apps, {[], []}, fn app, {removed, changed} ->
         case Enum.find(manifest[:apps], &(&1.app == app.app)) do
-          nil -> {[app | removed], changed}
+          nil ->
+            {[app | removed], changed}
+
           manifest_app ->
             case manifest_app.vsn == app.vsn do
               true -> {removed, changed}
@@ -21,7 +23,7 @@ defmodule Dialyzer.Plt.Manifest do
       end)
 
     apps_added =
-      Enum.filter(manifest[:apps], fn (manifest_app) ->
+      Enum.filter(manifest[:apps], fn manifest_app ->
         Enum.any?(apps, &(&1.app == manifest_app.app))
       end)
 
@@ -52,10 +54,8 @@ defmodule Dialyzer.Plt.Manifest do
   def up_to_date? do
     changes = changes()
 
-    changes[:apps][:added] == [] and
-    changes[:apps][:removed] == [] and
-    changes[:apps][:changed] == [] and
-    changes[:lock_file_changed] == false
+    changes[:apps][:added] == [] and changes[:apps][:removed] == [] and
+      changes[:apps][:changed] == [] and changes[:lock_file_changed] == false
   end
 
   @spec generate_lock_file_hash() :: binary
@@ -76,9 +76,9 @@ defmodule Dialyzer.Plt.Manifest do
 
   @spec all_applications() :: [Plt.App.t()]
   defp all_applications do
-      Project.dependencies()
-      |> Kernel.++([Project.application()])
-      |> Enum.map(&Plt.App.info/1)
-      |> Enum.filter(&(not is_nil(&1)))
+    Project.dependencies()
+    |> Kernel.++([Project.application()])
+    |> Enum.map(&Plt.App.info/1)
+    |> Enum.filter(&(not is_nil(&1)))
   end
 end
