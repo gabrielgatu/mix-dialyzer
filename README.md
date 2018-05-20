@@ -31,8 +31,7 @@ The final goal is to merge this project into elixir itself! :D
 
 # Difference from other projects
 
-**First of all, I would like to thank you the contributor to all the existing projects that already exists!
-Without you this would be even more difficult than what already is.**
+**First of all, I would like to thank the contributors of all the existing projects that already exists! Without you this would be even more difficult than what already is.**
 
 The goal of this project is to learn how the other existing solutions tried to implement dialyzer for elixir,
 take the good parts and implement them, then take the bad parts and try to improve over them.
