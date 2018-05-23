@@ -9,7 +9,7 @@ defmodule Dialyzer.Config do
 
   @spec new(CommandLine.Config.t()) :: Config.t()
   def new(%CommandLine.Config{} = config) do
-    init_plt = Plt.generate_deps_plt_path()
+    init_plt = Plt.Path.generate_deps_plt_path()
     files_rec = Project.build_paths()
 
     %Config{

@@ -1,61 +1,47 @@
 defmodule Dialyzer.Plt.Command do
-  def plt_new(plt_path) do
-    info("Creating #{Path.basename(plt_path)}")
+  require Logger
 
-    plt_path = path_to_erlang_format(plt_path)
+  @spec plt_new(binary) :: none
+  def plt_new(plt_path) do
+    Logger.info("Creating #{Path.basename(plt_path)}")
+
+    plt_path = to_charlist(plt_path)
     plt_run(analysis_type: :plt_build, output_plt: plt_path, apps: [:erts])
-    :ok
   end
 
+  @spec plt_copy(binary, binary) :: none
   def plt_copy(plt_path, new_plt_path) do
-    info("Copying #{Path.basename(plt_path)} to #{Path.basename(new_plt_path)}")
+    Logger.info("Copying #{Path.basename(plt_path)} to #{Path.basename(new_plt_path)}")
     File.cp!(plt_path, new_plt_path)
   end
 
+  @spec plt_add(binary, [binary]) :: none
   def plt_add(plt_path, files) do
-    case Enum.count(files) do
-      0 ->
-        :ok
+    Logger.info("Adding modules to #{Path.basename(plt_path)}")
 
-      n ->
-        info("Adding #{n} modules to #{Path.basename(plt_path)}")
-
-        plt_path = path_to_erlang_format(plt_path)
-        files = Enum.map(files, &path_to_erlang_format/1)
-        plt_run(analysis_type: :plt_add, init_plt: plt_path, files: files)
-        :ok
-    end
+    plt_path = to_charlist(plt_path)
+    files = Enum.map(files, &to_charlist/1)
+    plt_run(analysis_type: :plt_add, init_plt: plt_path, files: files)
   end
 
+  @spec plt_remove(binary, [binary]) :: none
   def plt_remove(plt_path, files) do
-    case Enum.count(files) do
-      0 ->
-        :ok
+    Logger.info("Removing modules from #{Path.basename(plt_path)}")
 
-      n ->
-        info("Removing #{n} modules from #{Path.basename(plt_path)}")
-
-        plt_path = path_to_erlang_format(plt_path)
-        files = Enum.map(files, &path_to_erlang_format/1)
-        plt_run(analysis_type: :plt_remove, init_plt: plt_path, files: files)
-        :ok
-    end
+    plt_path = to_charlist(plt_path)
+    files = Enum.map(files, &to_charlist/1)
+    plt_run(analysis_type: :plt_remove, init_plt: plt_path, files: files)
   end
 
-  def plt_check(plt_path, files) do
-    case Enum.count(files) do
-      0 ->
-        :ok
+  @spec plt_check(binary) :: none
+  def plt_check(plt_path) do
+    Logger.info("Checking modules in #{Path.basename(plt_path)}")
 
-      n ->
-        info("Checking #{n} modules in #{Path.basename(plt_path)}")
-
-        plt_path = path_to_erlang_format(plt_path)
-        plt_run(analysis_type: :plt_check, init_plt: plt_path)
-        :ok
-    end
+    plt_path = to_charlist(plt_path)
+    plt_run(analysis_type: :plt_check, init_plt: plt_path)
   end
 
+  @spec plt_run(Keyword.t()) :: none
   def plt_run(opts) do
     try do
       :dialyzer.run([check_plt: false] ++ opts)
@@ -64,11 +50,4 @@ defmodule Dialyzer.Plt.Command do
         IO.puts(":dialyzer.run error: #{msg}")
     end
   end
-
-  defp path_to_erlang_format(path) when is_bitstring(path) do
-    encoding = :file.native_name_encoding()
-    :unicode.characters_to_list(path, encoding)
-  end
-
-  defp info(msg), do: apply(Mix.shell(), :info, [msg])
 end
