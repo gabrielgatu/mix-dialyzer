@@ -72,6 +72,6 @@ defmodule Dialyzer.Plt.Builder do
 
   @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()
   defp collect_files_from_apps(apps) do
-    MapSet.new(Enum.flat_map(apps, &(&1.files)))
+    MapSet.new(Enum.flat_map(apps, & &1.files))
   end
 end
