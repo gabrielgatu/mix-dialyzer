@@ -11,8 +11,7 @@ defmodule Dialyzer.Plt.Builder do
   # the second element referes to the elixir plt and
   # the third element referes to the project level plt.
   @spec plts_list(Config.t()) :: [Plt.t()]
-  defp plts_list(config) do
-    IO.inspect(config)
+  def plts_list(config) do
     removed_apps = config.apps[:remove]
     included_apps = config.apps[:include]
 

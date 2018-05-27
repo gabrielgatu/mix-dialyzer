@@ -7,6 +7,11 @@ defmodule Dialyzer.Config do
 
   @type t :: %__MODULE__{}
 
+  @spec new() :: Config.t()
+  def new() do
+    load_config_file()
+  end
+
   @spec new(CommandLine.Config.t()) :: Config.t()
   def new(_cmd_config) do
     load_config_file()
