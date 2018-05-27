@@ -1,29 +1,29 @@
 defmodule Dialyzer.Plt.Manifest do
-  alias Dialyzer.{Plt, Project}
+  alias Dialyzer.{Config, Plt, Project}
 
-  @spec changes() :: Keyword.t()
-  def changes do
+  @type status :: :up_to_date | :outdated | :missing
+
+  @spec status(Config.t()) :: status
+  def status(config) do
+    cond do
+      not File.exists?(generate_manifest_path()) -> :missing
+      not Plt.plts_exists?() -> :missing
+      [apps: [added: [], removed: [], changed: []]] == changes(config) -> :up_to_date
+      true -> :outdated
+    end
+  end
+
+  @spec changes(Config.t()) :: Keyword.t()
+  def changes(config) do
     manifest = read_manifest!()
-    apps = all_applications()
+    apps =
+      all_applications()
+      |> Kernel.++(Enum.map(config.apps[:include], &Plt.App.info/1))
+      |> Kernel.--(Enum.map(config.apps[:remove], &Plt.App.info/1))
 
-    {apps_removed, apps_changed} =
-      Enum.reduce(manifest[:apps], {[], []}, fn manifest_app, {removed, changed} ->
-        case Enum.find(apps, &(&1.app == manifest_app.app)) do
-          nil ->
-            {[manifest_app | removed], changed}
-
-          app ->
-            case app.vsn == manifest_app.vsn do
-              true -> {removed, changed}
-              false -> {removed, [app | changed]}
-            end
-        end
-      end)
-
-    apps_added =
-      Enum.filter(apps, fn app ->
-        not Enum.any?(manifest[:apps], &(&1.app == app.app))
-      end)
+    apps_added = apps_added(apps, manifest)
+    apps_removed = apps_removed(apps, manifest)
+    apps_changed = apps_changed(apps, manifest)
 
     [
       apps: [
@@ -34,26 +34,51 @@ defmodule Dialyzer.Plt.Manifest do
     ]
   end
 
+  @spec apps_added([Plt.App.t()], Keyword.t()) :: [atom]
+  defp apps_added(apps, manifest) do
+    apps
+    |> Enum.filter(fn app ->
+      not Enum.any?(manifest[:apps], fn manifest_app ->
+        manifest_app.app == app.app
+      end)
+    end)
+  end
+
+  @spec apps_changed([Plt.App.t()], Keyword.t()) :: [atom]
+  defp apps_changed(apps, manifest) do
+    apps
+    |> Enum.filter(fn app ->
+      Enum.any?(manifest[:apps], fn manifest_app ->
+        manifest_app.app == app.app and manifest_app.vsn != manifest_app.vsn
+      end)
+    end)
+  end
+
+  @spec apps_removed([Plt.App.t()], Keyword.t()) :: [atom]
+  defp apps_removed(apps, manifest) do
+    Enum.filter(manifest[:apps], fn manifest_app ->
+      not Enum.any?(apps, &(&1.app == manifest_app.app))
+    end)
+  end
+
   @spec update() :: none
   def update do
     apps = all_applications()
     content = [apps: apps]
 
-    Plt.Path.generate_deps_plt_hash_path()
+    generate_manifest_path()
     |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity))
   end
 
-  @spec up_to_date?() :: boolean
-  def up_to_date? do
-    [apps: [added: [], removed: [], changed: []]] == changes()
-  end
-
-  @spec read_manifest!() :: [atom: any()]
+  @spec read_manifest!() :: Keyword.t()
   defp read_manifest! do
-    Plt.Path.generate_deps_plt_hash_path()
+    generate_manifest_path()
     |> Code.eval_file()
     |> elem(0)
   end
+
+  @spec generate_manifest_path() :: binary
+  defp generate_manifest_path(), do: Plt.Path.generate_deps_plt_path() <> ".manifest"
 
   @spec all_applications() :: [Plt.App.t()]
   defp all_applications do

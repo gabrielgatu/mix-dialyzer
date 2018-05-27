@@ -1,25 +1,31 @@
 defmodule Dialyzer.Plt.Builder do
-  alias Dialyzer.{Project, Plt}
+  alias Dialyzer.{Config, Project, Plt}
 
-  @spec build() :: none
-  def build do
-    plts_list() |> check_plts()
+  @spec build(Config.t()) :: none
+  def build(config) do
+    config |> plts_list() |> check_plts()
   end
 
   # Generates a list of 3 elements.
   # The first element referes to the erlang plt,
   # the second element referes to the elixir plt and
   # the third element referes to the project level plt.
-  @spec plts_list() :: [Plt.t()]
-  defp plts_list() do
-    erlang_apps = [:erts, :kernel, :stdlib, :crypto]
-    elixir_apps = [:elixir] ++ erlang_apps
+  @spec plts_list(Config.t()) :: [Plt.t()]
+  defp plts_list(config) do
+    IO.inspect(config)
+    removed_apps = config.apps[:remove]
+    included_apps = config.apps[:include]
+
+    erlang_apps = [:erts, :kernel, :stdlib, :crypto] -- removed_apps
+    elixir_apps = [:elixir] ++ erlang_apps -- removed_apps
 
     project_apps =
       Project.dependencies()
       |> Kernel.++([Project.application()])
       |> Kernel.++(elixir_apps)
       |> Kernel.++(erlang_apps)
+      |> Kernel.++(included_apps)
+      |> Kernel.--(removed_apps)
 
     [
       %Plt{

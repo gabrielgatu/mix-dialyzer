@@ -23,9 +23,6 @@ defmodule Dialyzer.Plt.Path do
   @spec generate_erlang_plt_path() :: binary
   def generate_erlang_plt_path(), do: build_plt_abs_path("erlang-" <> get_otp_version())
 
-  @spec generate_deps_plt_hash_path() :: binary
-  def generate_deps_plt_hash_path(), do: generate_deps_plt_path() <> ".hash"
-
   @spec get_otp_version() :: String.t()
   defp get_otp_version() do
     major = :erlang.system_info(:otp_release) |> List.to_string()

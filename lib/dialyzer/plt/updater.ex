@@ -1,9 +1,9 @@
 defmodule Dialyzer.Plt.Updater do
-  alias Dialyzer.{Plt}
+  alias Dialyzer.{Config, Plt}
 
-  @spec update() :: none
-  def update do
-    changes = Plt.Manifest.changes()
+  @spec update(Config.t()) :: none
+  def update(config) do
+    changes = Plt.Manifest.changes(config)
     plt = Plt.Path.generate_deps_plt_path()
 
     removed_files =
