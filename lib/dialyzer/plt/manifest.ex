@@ -16,6 +16,7 @@ defmodule Dialyzer.Plt.Manifest do
   @spec changes(Config.t()) :: Keyword.t()
   def changes(config) do
     manifest = read_manifest!()
+
     apps =
       all_applications()
       |> Kernel.++(Enum.map(config.apps[:include], &Plt.App.info/1))

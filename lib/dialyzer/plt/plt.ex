@@ -22,8 +22,8 @@ defmodule Dialyzer.Plt do
 
       :missing ->
         Logger.info("Creating plts for the first time")
-         Plt.Builder.build(config)
-         Plt.Manifest.update()
+        Plt.Builder.build(config)
+        Plt.Manifest.update()
     end
   end
 

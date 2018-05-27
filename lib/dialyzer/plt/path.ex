@@ -45,9 +45,9 @@ defmodule Dialyzer.Plt.Path do
     Mix.Project.config()
     |> Keyword.fetch!(:build_per_environment)
     |> case do
-         true -> Atom.to_string(Mix.env())
-         false -> "shared"
-       end
+      true -> Atom.to_string(Mix.env())
+      false -> "shared"
+    end
   end
 
   @spec build_plt_abs_path(String.t()) :: binary

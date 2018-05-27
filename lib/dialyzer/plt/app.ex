@@ -43,14 +43,14 @@ defmodule Dialyzer.Plt.App do
       |> Kernel.++('.beam')
       |> :code.where_is_file()
       |> case do
-           path when is_list(path) ->
-             path = Path.expand(path)
-             files = app.files || []
-             %App{app | files: [path | files]}
+        path when is_list(path) ->
+          path = Path.expand(path)
+          files = app.files || []
+          %App{app | files: [path | files]}
 
-           :non_existing ->
-             app
-         end
+        :non_existing ->
+          app
+      end
     end)
   end
 end

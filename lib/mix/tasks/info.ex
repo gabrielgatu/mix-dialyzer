@@ -6,26 +6,33 @@ defmodule Mix.Tasks.Dialyzer.Info do
 
   @warning_info [
     error_handling: "Include warnings for functions that only return by an exception.",
-    no_behaviours: "Suppress warnings about behavior callbacks that drift from the published recommended interfaces.",
+    no_behaviours:
+      "Suppress warnings about behavior callbacks that drift from the published recommended interfaces.",
     no_contracts: "Suppress warnings about invalid contracts.",
     no_fail_call: "Suppress warnings for failing calls.",
     no_fun_app: "Suppress warnings for fun applications that will fail.",
     no_improper_lists: "Suppress warnings for construction of improper lists.",
     no_match: "Suppress warnings for patterns that are unused or cannot match.",
-	  no_missing_calls: "Suppress warnings about calls to missing functions.",
+    no_missing_calls: "Suppress warnings about calls to missing functions.",
     no_opaque: "Suppress warnings for violations of opacity of data types.",
-	  no_return: "Suppress warnings for functions that will never return a value.",
-    no_undefined_callbacks: "Suppress warnings about behaviors that have no -callback attributes for their callbacks.",
+    no_return: "Suppress warnings for functions that will never return a value.",
+    no_undefined_callbacks:
+      "Suppress warnings about behaviors that have no -callback attributes for their callbacks.",
     no_unused: "Suppress warnings for unused functions.",
-    race_conditions: "Include warnings for possible race conditions. Notice that the analysis that finds data races performs intra-procedural data flow analysis and can sometimes explode in time. Enable it at your own risk.",
-    underspecs: "Warn about underspecified functions (the specification is strictly more allowing than the success typing).",
-    unknown: "Let warnings about unknown functions and types affect the exit status of the command-line version. The default is to ignore warnings about unknown functions and types when setting the exit status. When using Dialyzer from Erlang, warnings about unknown functions and types are returned; the default is not to return these warnings.",
-    unmatched_returns: "Include warnings for function calls that ignore a structured return value or do not match against one of many possible return value(s).",
-    overspecs: "Warn about overspecified functions (the specification is strictly less allowing than the success typing).",
-    specdiffs: "Warn when the specification is different than the success typing.",
+    race_conditions:
+      "Include warnings for possible race conditions. Notice that the analysis that finds data races performs intra-procedural data flow analysis and can sometimes explode in time. Enable it at your own risk.",
+    underspecs:
+      "Warn about underspecified functions (the specification is strictly more allowing than the success typing).",
+    unknown:
+      "Let warnings about unknown functions and types affect the exit status of the command-line version. The default is to ignore warnings about unknown functions and types when setting the exit status. When using Dialyzer from Erlang, warnings about unknown functions and types are returned; the default is not to return these warnings.",
+    unmatched_returns:
+      "Include warnings for function calls that ignore a structured return value or do not match against one of many possible return value(s).",
+    overspecs:
+      "Warn about overspecified functions (the specification is strictly less allowing than the success typing).",
+    specdiffs: "Warn when the specification is different than the success typing."
   ]
 
-  def run(args) do
+  def run(_args) do
     Mix.Project.compile([])
     config = Dialyzer.Config.new()
 
@@ -76,9 +83,10 @@ defmodule Mix.Tasks.Dialyzer.Info do
       acc ++ plt.apps
     end)
     |> Enum.reduce("", fn app, acc ->
-      acc <> """
-        * #{cyan(app.app)}
-      """
+      acc <>
+        """
+          * #{cyan(app.app)}
+        """
     end)
     |> case do
       "" -> "[]"
@@ -89,9 +97,10 @@ defmodule Mix.Tasks.Dialyzer.Info do
   defp applications_not_analyzed(config) do
     config.apps[:remove]
     |> Enum.reduce("", fn app, acc ->
-      acc <> """
-        * #{cyan(app.app)}
-      """
+      acc <>
+        """
+          * #{cyan(app.app)}
+        """
     end)
     |> case do
       "" -> "[]"
@@ -101,12 +110,14 @@ defmodule Mix.Tasks.Dialyzer.Info do
 
   defp warnings_analyzed(config) do
     Enum.reduce(config.warnings, "", fn warning, acc ->
-      acc <> """
-        * `#{cyan(warning)}`: #{@warning_info[warning]}
+      acc <>
+        """
+          * `#{cyan(warning)}`: #{@warning_info[warning]}
 
-      """
+        """
     end)
-    |> String.trim() # To eliminate blank line at the end
+    # To eliminate blank line at the end
+    |> String.trim()
     |> case do
       "" -> "[]"
       str -> str
@@ -117,12 +128,14 @@ defmodule Mix.Tasks.Dialyzer.Info do
     warnings = Keyword.keys(@warning_info) -- config.warnings
 
     Enum.reduce(warnings, "", fn warning, acc ->
-      acc <> """
-        * `#{cyan(warning)}`: #{@warning_info[warning]}
+      acc <>
+        """
+          * `#{cyan(warning)}`: #{@warning_info[warning]}
 
-      """
+        """
     end)
-    |> String.trim() # To eliminate blank line at the end
+    # To eliminate blank line at the end
+    |> String.trim()
     |> case do
       "" -> "[]"
       str -> str
@@ -131,12 +144,14 @@ defmodule Mix.Tasks.Dialyzer.Info do
 
   defp build_directories(config) do
     Enum.reduce(config.build_dir, "", fn dir, acc ->
-      acc <> """
-        - #{cyan(dir)}
+      acc <>
+        """
+          - #{cyan(dir)}
 
-      """
+        """
     end)
-    |> String.trim() # To eliminate blank line at the end
+    # To eliminate blank line at the end
+    |> String.trim()
   end
 
   defp bright(text) do

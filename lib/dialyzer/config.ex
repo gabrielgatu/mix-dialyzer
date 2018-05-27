@@ -29,7 +29,9 @@ defmodule Dialyzer.Config do
         |> read_config_file()
 
       {:error, _} ->
-        Logger.info("Dialyzer: configuration file not found. Creating it right now at .dialyzer.exs")
+        Logger.info(
+          "Dialyzer: configuration file not found. Creating it right now at .dialyzer.exs"
+        )
 
         content = create_base_config()
         create_config_file(content)
@@ -51,7 +53,7 @@ defmodule Dialyzer.Config do
       warnings: warnings,
       apps: [
         remove: remove_apps,
-        include: include_apps,
+        include: include_apps
       ]
     }
   end
@@ -62,11 +64,14 @@ defmodule Dialyzer.Config do
 
     [
       warnings: [
-        :unmatched_returns, :error_handling, :underspecs, :unknown
+        :unmatched_returns,
+        :error_handling,
+        :underspecs,
+        :unknown
       ],
       apps: [
         remove: [],
-        include: [],
+        include: []
       ],
       build_dir: build_dir
     ]
@@ -74,8 +79,8 @@ defmodule Dialyzer.Config do
 
   @spec create_config_file(Keyword.t()) :: none
   defp create_config_file(content) do
-    config_filename() |>
-    File.write!(inspect(content, limit: :infinity, printable_limit: :infinity, pretty: true))
+    config_filename()
+    |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity, pretty: true))
   end
 
   @spec config_filename :: binary
