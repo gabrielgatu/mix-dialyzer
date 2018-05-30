@@ -70,8 +70,8 @@ defmodule Mix.Tasks.Dialyzer.Info do
     ## #{bright("More infos")}
 
     If you want to read more about dialyzer itself, here you can find some nice infos:
-    - **http://learnyousomeerlang.com/dialyzer** A general guide to what dialyzer is and how it works
-    - **http://erlang.org/doc/man/dialyzer.html** Official documentation
+    - http://learnyousomeerlang.com/dialyzer A general guide to what dialyzer is and how it works
+    - http://erlang.org/doc/man/dialyzer.html Official documentation
     """)
   end
 
@@ -82,18 +82,45 @@ defmodule Mix.Tasks.Dialyzer.Info do
   defp applications_analyzed(config) do
     config
     |> Dialyzer.Plt.Builder.plts_list()
-    |> Enum.reduce([], fn plt, acc ->
-      acc ++ plt.apps
+    |> Enum.reduce({"", nil}, fn plt, {str, prev_plt} ->
+      section_name =
+        [
+          erlang: "Erlang applications",
+          elixir: "Elixir applications",
+          project: "Project applications"
+        ][plt.name]
+
+      apps =
+        prev_plt
+        |> case do
+          nil -> plt.apps
+          prev_plt -> plt.apps -- prev_plt.apps
+        end
+        |> Enum.map(& &1.app)
+
+      str = str <> format_applications_analyzed_section(section_name, apps)
+      {str, plt}
     end)
-    |> Enum.reduce("", fn app, acc ->
+    |> elem(0)
+  end
+
+  defp format_applications_analyzed_section(section_name, apps) do
+    Enum.reduce(apps, "", fn app, acc ->
       acc <>
         """
-          * #{cyan(app.app)}
+          * #{cyan(app)}
         """
     end)
     |> case do
-      "" -> "[]"
-      str -> str
+      "" ->
+        "[]"
+
+      str ->
+        """
+
+          ### #{bright(section_name)}
+
+        """ <> str
     end
   end
 
