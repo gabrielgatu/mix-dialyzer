@@ -16,7 +16,7 @@ defmodule Dialyzer.Plt.Builder do
     included_apps = config.apps[:include]
 
     erlang_apps = [:erts, :kernel, :stdlib, :crypto] -- removed_apps
-    elixir_apps = [:elixir] ++ (erlang_apps -- removed_apps)
+    elixir_apps = ([:elixir] ++ erlang_apps) -- removed_apps
 
     project_apps =
       Project.dependencies()

@@ -37,6 +37,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     config = Dialyzer.Config.new()
 
     IO.puts("""
+
     Welcome to mix dialyzer! A tool for integrating dialyzer into a project and analyzing discrepances.
     Here are some infos about your system:
 
