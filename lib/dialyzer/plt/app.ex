@@ -5,8 +5,17 @@ defmodule Dialyzer.Plt.App do
 
   @type t :: %App{}
 
-  @spec info(atom) :: t | nil
-  def info(app) do
+  @spec get_info(atom, boolean) :: t | nil
+  def info(app), do: get_info(app, true)
+  def info(app, use_cached_version), do: get_info(app, use_cached_version)
+
+  @spec get_info(atom, boolean) :: t | nil
+  defp get_info(app, true) do
+    App.Cache.get_or_insert(app)
+  end
+
+  @spec get_info(atom, boolean) :: t | nil
+  defp get_info(app, false) do
     case can_load_app?(app) do
       false ->
         nil
@@ -52,5 +61,37 @@ defmodule Dialyzer.Plt.App do
           app
       end
     end)
+  end
+end
+
+defmodule Dialyzer.Plt.App.Cache do
+  use GenServer
+
+  def start_link(_) do
+    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  end
+
+  def get_or_insert(app) do
+    GenServer.call(__MODULE__, {:get_or_insert, app})
+  end
+
+  # Server API
+
+  def init(args) do
+    {:ok, args}
+  end
+
+  def handle_call({:get_or_insert, app}, _from, state) do
+    {info, new_state} =
+      case Map.fetch(state, app) do
+        :error ->
+          info = Dialyzer.Plt.App.info(app, false)
+          {info, Map.put(state, app, info)}
+
+        {:ok, info} ->
+          {info, state}
+      end
+
+    {:reply, info, new_state}
   end
 end

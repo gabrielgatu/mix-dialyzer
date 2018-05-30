@@ -5,6 +5,7 @@ defmodule Mix.Tasks.Dialyzer do
 
   def run(args) do
     Mix.Project.compile([])
+    Dialyzer.Application.start(nil, nil)
 
     config =
       args

@@ -34,6 +34,8 @@ defmodule Mix.Tasks.Dialyzer.Info do
 
   def run(_args) do
     Mix.Project.compile([])
+    Dialyzer.Application.start(nil, nil)
+
     config = Dialyzer.Config.new()
 
     IO.puts("""
