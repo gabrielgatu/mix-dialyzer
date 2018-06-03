@@ -68,7 +68,7 @@ defmodule Dialyzer.Config do
   @spec read_config_file(binary) :: t
   defp read_config_file(content) do
     init_plt = Plt.Path.generate_deps_plt_path()
-    build_dir = content[:build_dir]
+    build_dir = content[:extra_build_dir] ++ Project.build_paths()
     warnings = content[:warnings]
     remove_apps = content[:apps][:remove]
     include_apps = content[:apps][:include]
@@ -86,7 +86,6 @@ defmodule Dialyzer.Config do
 
   @spec create_base_config() :: Keyword.t()
   defp create_base_config do
-    build_dir = Project.build_paths()
     warnings = default_warnings()
 
     [
@@ -95,7 +94,7 @@ defmodule Dialyzer.Config do
         remove: [],
         include: []
       ],
-      build_dir: build_dir
+      extra_build_dir: []
     ]
   end
 

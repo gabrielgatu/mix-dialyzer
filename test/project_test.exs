@@ -9,11 +9,11 @@ defmodule Dialyzer.ProjectTest do
   end
 
   describe "when inside a project" do
-
     test "it gets correctly the application name", %{name: name, path: path} do
       app = String.to_atom(name)
+
       Mix.Project.in_project(app, path, fn _ ->
-        assert Project.application == app
+        assert Project.application() == app
       end)
     end
 
@@ -31,6 +31,7 @@ defmodule Dialyzer.ProjectTest do
 
     test "it gets all the build paths", %{name: name, path: path} do
       app = String.to_atom(name)
+
       Mix.Project.in_project(app, path, fn _ ->
         assert Enum.count(Project.build_paths()) == 1
       end)

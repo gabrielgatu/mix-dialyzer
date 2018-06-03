@@ -1,5 +1,4 @@
 defmodule Dialyzer.Test.Util do
-
   def create_temporary_project do
     name = random_string(10)
     path = Path.join(System.tmp_dir(), name)
@@ -14,9 +13,9 @@ defmodule Dialyzer.Test.Util do
       ?a..?z
       |> Enum.into([])
       |> to_string()
-      |> String.codepoints
+      |> String.codepoints()
 
-    Enum.reduce((1..length), [], fn (_i, acc) -> [Enum.random(alphabet) | acc] end)
+    Enum.reduce(1..length, [], fn _i, acc -> [Enum.random(alphabet) | acc] end)
     |> Enum.join()
   end
 end

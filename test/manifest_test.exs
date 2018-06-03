@@ -59,7 +59,9 @@ defmodule Dialyzer.Plt.ManifestTest do
         Manifest.update()
 
         config = %Config{config | apps: [remove: [:kernel], include: []]}
-        assert (Manifest.changes(config)[:apps][:removed] |> Enum.at(0) |> Map.fetch!(:app)) == :kernel
+
+        assert Manifest.changes(config)[:apps][:removed] |> Enum.at(0) |> Map.fetch!(:app) ==
+                 :kernel
       end)
     end
   end

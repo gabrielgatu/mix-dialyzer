@@ -82,6 +82,7 @@ defmodule Dialyzer.Plt.App.Cache do
           {:ok, info} ->
             {info, state}
         end
+
       {info, new_state}
     end)
   end

@@ -18,7 +18,9 @@ defmodule Dialyzer.ConfigTest do
       end)
     end
 
-    test "it creates a new configuration file in project root when trying to load it", %{path: path} do
+    test "it creates a new configuration file in project root when trying to load it", %{
+      path: path
+    } do
       File.cd!(path, fn ->
         Config.path() |> File.rm()
 
