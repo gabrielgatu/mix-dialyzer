@@ -52,15 +52,15 @@ defmodule Dialyzer.Plt.Builder do
   defp check_plts([plt | rest], nil) do
     plt_files = collect_files_from_apps(plt.apps)
 
-    Plt.Command.plt_new(plt.path)
-    Plt.Command.plt_add(plt.path, plt_files)
-    Plt.Command.plt_check(plt.path)
+    Plt.Command.new(plt.path)
+    Plt.Command.add(plt.path, plt_files)
+    Plt.Command.check(plt.path)
 
     check_plts(rest, plt)
   end
 
   defp check_plts([plt | rest], prev_plt) do
-    Plt.Command.plt_copy(prev_plt.path, plt.path)
+    Plt.Command.copy(prev_plt.path, plt.path)
 
     plt_files = collect_files_from_apps(plt.apps)
     prev_plt_files = collect_files_from_apps(prev_plt.apps)
@@ -68,9 +68,9 @@ defmodule Dialyzer.Plt.Builder do
     remove = MapSet.difference(prev_plt_files, plt_files)
     add = MapSet.difference(plt_files, prev_plt_files)
 
-    Plt.Command.plt_remove(plt.path, remove)
-    Plt.Command.plt_add(plt.path, add)
-    Plt.Command.plt_check(plt.path)
+    Plt.Command.remove(plt.path, remove)
+    Plt.Command.add(plt.path, add)
+    Plt.Command.check(plt.path)
 
     check_plts(rest, plt)
   end
