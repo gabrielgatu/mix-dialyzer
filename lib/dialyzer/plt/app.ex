@@ -65,33 +65,30 @@ defmodule Dialyzer.Plt.App do
 end
 
 defmodule Dialyzer.Plt.App.Cache do
-  use GenServer
+  use Agent
 
   def start_link(_) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+    Agent.start_link(fn -> %{} end, name: __MODULE__)
   end
 
   def get_or_insert(app) do
-    GenServer.call(__MODULE__, {:get_or_insert, app})
+    Agent.get_and_update(__MODULE__, fn state ->
+      {info, new_state} =
+        case Map.fetch(state, app) do
+          :error ->
+            info = Dialyzer.Plt.App.info(app, false)
+            {info, Map.put(state, app, info)}
+
+          {:ok, info} ->
+            {info, state}
+        end
+      {info, new_state}
+    end)
   end
 
-  # Server API
-
-  def init(args) do
-    {:ok, args}
-  end
-
-  def handle_call({:get_or_insert, app}, _from, state) do
-    {info, new_state} =
-      case Map.fetch(state, app) do
-        :error ->
-          info = Dialyzer.Plt.App.info(app, false)
-          {info, Map.put(state, app, info)}
-
-        {:ok, info} ->
-          {info, state}
-      end
-
-    {:reply, info, new_state}
+  def in_cache?(app) do
+    Agent.get(__MODULE__, fn state ->
+      Map.has_key?(state, app)
+    end)
   end
 end

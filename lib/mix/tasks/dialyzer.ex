@@ -5,7 +5,7 @@ defmodule Mix.Tasks.Dialyzer do
 
   def run(args) do
     Mix.Project.compile([])
-    Dialyzer.Application.start(nil, nil)
+    Application.ensure_started(:mix_dialyzer)
 
     config =
       args
