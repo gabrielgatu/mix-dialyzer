@@ -7,6 +7,11 @@ defmodule Dialyzer.Config do
 
   @type t :: %__MODULE__{}
 
+  @doc """
+  It loads and (if not already present), creates the
+  configuration file with the default options inferred
+  from the project enviroment.
+  """
   @spec new() :: Config.t()
   def new() do
     load_config_file()
@@ -17,9 +22,30 @@ defmodule Dialyzer.Config do
     load_config_file()
   end
 
+  @doc """
+  It returns the absolute path of the configuration file.
+  """
+  @spec path :: binary
+  def path do
+    File.cwd!() |> Path.join("/.dialyzer.exs")
+  end
+
+  @doc """
+  It returns the default warnings used for an analysis.
+  """
+  @spec default_warnings :: [atom]
+  def default_warnings do
+    [
+      :unmatched_returns,
+      :error_handling,
+      :underspecs,
+      :unknown
+    ]
+  end
+
   @spec load_config_file() :: t
   defp load_config_file do
-    config_filename()
+    path()
     |> File.read()
     |> case do
       {:ok, content} ->
@@ -61,14 +87,10 @@ defmodule Dialyzer.Config do
   @spec create_base_config() :: Keyword.t()
   defp create_base_config do
     build_dir = Project.build_paths()
+    warnings = default_warnings()
 
     [
-      warnings: [
-        :unmatched_returns,
-        :error_handling,
-        :underspecs,
-        :unknown
-      ],
+      warnings: warnings,
       apps: [
         remove: [],
         include: []
@@ -79,13 +101,8 @@ defmodule Dialyzer.Config do
 
   @spec create_config_file(Keyword.t()) :: none
   defp create_config_file(content) do
-    config_filename()
+    path()
     |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity, pretty: true))
-  end
-
-  @spec config_filename :: binary
-  defp config_filename do
-    File.cwd!() |> Path.join("/.dialyzer.exs")
   end
 
   @spec to_erlang_format(Config.t()) :: map

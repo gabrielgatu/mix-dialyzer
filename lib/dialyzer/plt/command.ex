@@ -47,7 +47,7 @@ defmodule Dialyzer.Plt.Command do
       :dialyzer.run([check_plt: false] ++ opts)
     catch
       {:dialyzer_error, msg} ->
-        IO.puts(":dialyzer.run error: #{msg}")
+        Logger.error(":dialyzer.run error: #{msg}")
     end
   end
 end

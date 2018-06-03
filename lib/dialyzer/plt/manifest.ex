@@ -6,7 +6,7 @@ defmodule Dialyzer.Plt.Manifest do
   @spec status(Config.t()) :: status
   def status(config) do
     cond do
-      not File.exists?(generate_manifest_path()) -> :missing
+      not File.exists?(path()) -> :missing
       not Plt.plts_exists?() -> :missing
       [apps: [added: [], removed: [], changed: []]] == changes(config) -> :up_to_date
       true -> :outdated
@@ -35,6 +35,18 @@ defmodule Dialyzer.Plt.Manifest do
     ]
   end
 
+  @spec update() :: none
+  def update do
+    apps = all_applications()
+    content = [apps: apps]
+
+    path()
+    |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity))
+  end
+
+  @spec path() :: binary
+  def path(), do: Plt.Path.generate_deps_plt_path() <> ".manifest"
+
   @spec apps_added([Plt.App.t()], Keyword.t()) :: [atom]
   defp apps_added(apps, manifest) do
     apps
@@ -62,24 +74,12 @@ defmodule Dialyzer.Plt.Manifest do
     end)
   end
 
-  @spec update() :: none
-  def update do
-    apps = all_applications()
-    content = [apps: apps]
-
-    generate_manifest_path()
-    |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity))
-  end
-
   @spec read_manifest!() :: Keyword.t()
   defp read_manifest! do
-    generate_manifest_path()
+    path()
     |> Code.eval_file()
     |> elem(0)
   end
-
-  @spec generate_manifest_path() :: binary
-  defp generate_manifest_path(), do: Plt.Path.generate_deps_plt_path() <> ".manifest"
 
   @spec all_applications() :: [Plt.App.t()]
   defp all_applications do
