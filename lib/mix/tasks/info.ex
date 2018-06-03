@@ -36,7 +36,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Mix.Project.compile([])
     Dialyzer.Application.start(nil, nil)
 
-    config = Dialyzer.Config.new()
+    config = Dialyzer.Config.load()
 
     IO.puts("""
 

@@ -17,7 +17,7 @@ defmodule Dialyzer.Plt.ManifestTest do
       Mix.Project.in_project(app, path, fn _ ->
         Manifest.path() |> File.rm()
 
-        config = Config.new()
+        config = Config.load()
         assert Manifest.status(config) == :missing
       end)
     end
@@ -28,7 +28,7 @@ defmodule Dialyzer.Plt.ManifestTest do
       app = String.to_atom(name)
 
       Mix.Project.in_project(app, path, fn _ ->
-        config = Config.new()
+        config = Config.load()
         Dialyzer.Plt.ensure_loaded(config)
         Manifest.update()
 
@@ -40,7 +40,7 @@ defmodule Dialyzer.Plt.ManifestTest do
       app = String.to_atom(name)
 
       Mix.Project.in_project(app, path, fn _ ->
-        config = Config.new()
+        config = Config.load()
         Dialyzer.Plt.ensure_loaded(config)
         Manifest.update()
 
@@ -55,7 +55,7 @@ defmodule Dialyzer.Plt.ManifestTest do
       app = String.to_atom(name)
 
       Mix.Project.in_project(app, path, fn _ ->
-        config = Config.new()
+        config = Config.load()
         Manifest.update()
 
         config = %Config{config | apps: [remove: [:kernel], include: []]}

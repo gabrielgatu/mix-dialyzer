@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Dialyzer do
     config =
       args
       |> Dialyzer.CommandLine.Config.parse()
-      |> Dialyzer.Config.new()
+      |> Dialyzer.Config.load()
 
     Dialyzer.Plt.ensure_loaded(config)
     Dialyzer.run(config) |> IO.inspect()

@@ -22,7 +22,7 @@ defmodule Dialyzer.ConfigTest do
       File.cd!(path, fn ->
         Config.path() |> File.rm()
 
-        Config.new()
+        Config.load()
         config_path = Config.path()
         assert File.exists?(config_path)
       end)
@@ -32,7 +32,7 @@ defmodule Dialyzer.ConfigTest do
   describe "when config file is present" do
     test "it is present in project root", %{path: path} do
       File.cd!(path, fn ->
-        Config.new()
+        Config.load()
         path = Config.path()
         assert File.exists?(path)
       end)
@@ -40,14 +40,14 @@ defmodule Dialyzer.ConfigTest do
 
     test "it evaluates correctly the file", %{path: path} do
       File.cd!(path, fn ->
-        config = Config.new()
+        config = Config.load()
         assert is_map(config)
       end)
     end
 
     test "it has default options setted correctly", %{path: path} do
       File.cd!(path, fn ->
-        config = Config.new()
+        config = Config.load()
         assert config.apps == [remove: [], include: []]
         assert config.init_plt == Plt.Path.generate_deps_plt_path()
         assert config.warnings == Config.default_warnings()
