@@ -2,11 +2,10 @@ defmodule Dialyzer.Application do
   use Application
 
   def start(_type, _args) do
+    import Supervisor.Spec
+
     children = [
-      %{
-        id: Dialyzer.Plt.App.Cache,
-        start: {Dialyzer.Plt.App.Cache, :start_link, [[]]}
-      }
+      worker(Dialyzer.Plt.App.Cache, [])
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one)
