@@ -25,19 +25,7 @@ defmodule Dialyzer.Plt.Path do
 
   @spec get_otp_version() :: String.t()
   defp get_otp_version() do
-    major = :erlang.system_info(:otp_release) |> List.to_string()
-    version_file = Path.join([:code.root_dir(), "releases", major, "OTP_VERSION"])
-
-    try do
-      version_file
-      |> File.read!()
-      |> String.split("\n", trim: true)
-    else
-      [full] -> full
-      _ -> major
-    catch
-      :error, _ -> major
-    end
+    "#{System.otp_release()}-erts-#{:erlang.system_info(:version)}"
   end
 
   @spec get_build_env_tag() :: String.t()
