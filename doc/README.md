@@ -36,15 +36,15 @@ this would have been much harder!
 The `mix dialyzer` task doesn't require any argument, and takes care of different
 things:
     
-    - Creating a configuration file in case it doesn't exist (.dialyzer.exs)
-    - Creating all the necessary plts
-    - Caching the plts in the proper folders and building a manifest file
-    - Updating the project plt with the latest changes
-    - Displaying to the user the result of the analysis
+- Creating a configuration file in case it doesn't exist (.dialyzer.exs)
+- Creating all the necessary plts
+- Caching the plts in the proper folders and building a manifest file
+- Updating the project plt with the latest changes
+- Displaying to the user the result of the analysis
 
 # Configuration file
 
-First of all, when `mix dialyzer is executed`, it searches for a file called
+First of all, when `mix dialyzer` is executed, it searches for a file called
 **.dialyzer.exs** inside the project root.
 
 This configuration file is similar in scope to what the *.credo.exs* or the *.formatter.exs* do: it is used to configure the dialyzer application, and allows the user to control the applications analyzed/excluded, the active warnings and external build directories.
@@ -65,17 +65,18 @@ Every time the configuration file is updated (for instance, an application is re
 
 The plt building is divided into 3 phases:
 
-    - All the direct and transitive dependencies of the project are analyzed
-    - It generates a definition of 3 plts to be created: erlang, elixir and project
-    - It builds each plt by caching common resources and reusing the previous plt
+- All the direct and transitive dependencies of the project are found and analyzed
+- It generates a definition of 3 plts to be created: erlang, elixir and project
+- It builds each plt by caching common resources and reusing the previous plt
 
-The first point is pretty straightforward, it gets all the dependencies of the project (by handling also umbrella projects) and transitive dependencies (deps of deps), and for each one, it tries to get informations like declared modules, filepaths and versions, caching each visited application and reusing them in case of multiple requests.
+The first point is pretty straightforward, it gets all the dependencies of the project (by handling also umbrella projects) and transitive dependencies (deps of deps), and for each one, it tries to get informations like declared modules, filepaths and version, caching each visited application and reusing them in case of multiple requests.
 
 In the second point, it uses the previous found applications to define 3 plts to be built in order: the erlang, elixir and project level plts.
 
 The erlang and elixir plts contain constant defined applications:
-    - erlang: `[:erts, :kernel, :stdlib, :crypto]`
-    - elixir `[:elixir] ++ erlang`
+
+- erlang: `[:erts, :kernel, :stdlib, :crypto]`
+- elixir `[:elixir] ++ erlang`
 
 and are going to be located in the home folder of the user, to allow multiple projects to take advantage of them.
 
@@ -90,15 +91,15 @@ After each build/update of the plts, a manifest file is created inside the *_bui
 
 The manifest file contains a snapshot of the project in that precise moment. When a new **mix dialyzer** invocation happens, the manifest file is the first one checked, by comparing the previously cached snapshot with the current enviroment, and resulting in one of these 3 states:
 
-    - `:missing` - plt or manifest file is missing
-    - `:outdated` - plts and manifest exists, but something is outdated
-    - `:up_to_date` - everything seems good
+- `:missing` - plt or manifest file is missing
+- `:outdated` - plts and manifest exists, but something is outdated
+- `:up_to_date` - everything seems good
 
 When all plts and manifest are present, to check the status of the project, the manifest is performing different checks:
     
-    - Snapshot applications are the same as current applications
-    - No applications has been included/removed by the `.dialyzer.exs` config file
-    - They have the same version
+- Snapshot applications are the same as current applications
+- No applications has been included/removed by the `.dialyzer.exs` config file
+- They have the same version
 
 # Plt updating
 
@@ -107,8 +108,8 @@ In this case, the manifest file returns a list of all the applications that has 
 
 The updating process takes these applications, and creates 2 lists of modules:
 
-1 - Modules to remove
-2 - Modules to add
+- 1: Modules to remove
+- 2: Modules to add
 
 In the end, it performs the task by removing and then adding the modules to the project level plt. Finally it checks again the plt for consistency.
 
