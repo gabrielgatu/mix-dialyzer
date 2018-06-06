@@ -27,6 +27,9 @@ defmodule Dialyzer.Plt do
     end
   end
 
+  @doc """
+  It checks that all plt's exists, otherwise returns false.
+  """
   @spec plts_exists?() :: boolean
   def plts_exists? do
     [

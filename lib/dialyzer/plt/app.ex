@@ -5,6 +5,12 @@ defmodule Dialyzer.Plt.App do
 
   @type t :: %App{}
 
+  @doc """
+  It returns informations, like modules defined,
+  files location and current version, of an application.
+
+  Returns nil if the application doesn't exist.
+  """
   @spec get_info(atom, boolean) :: t | nil
   def info(app), do: get_info(app, true)
   def info(app, use_cached_version), do: get_info(app, use_cached_version)

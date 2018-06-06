@@ -2,15 +2,21 @@ defmodule Dialyzer.Plt.Builder do
   alias Dialyzer.{Config, Project, Plt}
   require Logger
 
+  @doc """
+  It builds incrementally all the plts and checks
+  for their consistency through dialyzer.
+  """
   @spec build(Config.t()) :: none
   def build(config) do
     config |> plts_list() |> check_plts()
   end
 
-  # Generates a list of 3 elements.
-  # The first element referes to the erlang plt,
-  # the second element referes to the elixir plt and
-  # the third element referes to the project level plt.
+  @doc """
+  Generates a list of 3 elements.
+  The first element referes to the erlang plt,
+  the second element referes to the elixir plt and
+  the third element referes to the project level plt.
+  """
   @spec plts_list(Config.t()) :: [Plt.t()]
   def plts_list(config) do
     removed_apps = config.apps[:remove]

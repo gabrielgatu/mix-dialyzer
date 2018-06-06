@@ -1,6 +1,10 @@
 defmodule Dialyzer.Plt.Updater do
   alias Dialyzer.{Config, Plt}
 
+  @doc """
+  It updates the project plt by analyzing the manifest file,
+  and updating only the applications that really changed.
+  """
   @spec update(Config.t()) :: none
   def update(config) do
     changes = Plt.Manifest.changes(config)

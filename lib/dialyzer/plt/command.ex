@@ -1,6 +1,11 @@
 defmodule Dialyzer.Plt.Command do
   require Logger
 
+  @doc """
+  It creates a new plt basic plt inside the path passed.
+  Since dialyzer requires at least one application, it uses :erts
+  as a default and automatically included application.
+  """
   @spec new(binary) :: none
   def new(plt_path) do
     Logger.info("Creating #{Path.basename(plt_path)}")
@@ -9,12 +14,18 @@ defmodule Dialyzer.Plt.Command do
     run(analysis_type: :plt_build, output_plt: plt_path, apps: [:erts])
   end
 
+  @doc """
+  It duplicates a plt by copying it from one path to another one.
+  """
   @spec copy(binary, binary) :: none
   def copy(plt_path, new_plt_path) do
     Logger.info("Copying #{Path.basename(plt_path)} to #{Path.basename(new_plt_path)}")
     File.cp!(plt_path, new_plt_path)
   end
 
+  @doc """
+  It adds the files to the plt, without checking.
+  """
   @spec add(binary, [binary]) :: none
   def add(plt_path, files) do
     Logger.info("Adding modules to #{Path.basename(plt_path)}")
@@ -24,6 +35,9 @@ defmodule Dialyzer.Plt.Command do
     run(analysis_type: :plt_add, init_plt: plt_path, files: files)
   end
 
+  @doc """
+  It removes the files from the plt, without checking.
+  """
   @spec remove(binary, [binary]) :: none
   def remove(plt_path, files) do
     Logger.info("Removing modules from #{Path.basename(plt_path)}")
@@ -33,6 +47,9 @@ defmodule Dialyzer.Plt.Command do
     run(analysis_type: :plt_remove, init_plt: plt_path, files: files)
   end
 
+  @doc """
+  It used dialyzer to check the plt.
+  """
   @spec check(binary) :: none
   def check(plt_path) do
     Logger.info("Checking modules in #{Path.basename(plt_path)}")
@@ -41,6 +58,9 @@ defmodule Dialyzer.Plt.Command do
     run(analysis_type: :plt_check, init_plt: plt_path)
   end
 
+  @doc """
+  It runs dialyzer with the arguments passed.
+  """
   @spec run(Keyword.t()) :: none
   def run(opts) do
     try do

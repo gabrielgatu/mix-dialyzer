@@ -3,6 +3,12 @@ defmodule Dialyzer.Plt.Manifest do
 
   @type status :: :up_to_date | :outdated | :missing
 
+  @doc """
+  It returns the plt status of the project:
+    * :missing - when plt / manifest file is missing
+    * :outdated - when an application / module has been changed
+    * :up_to_date - when nothing needs to be updated
+  """
   @spec status(Config.t()) :: status
   def status(config) do
     cond do
@@ -13,6 +19,10 @@ defmodule Dialyzer.Plt.Manifest do
     end
   end
 
+  @doc """
+  It returns a keyword list with all the changes detected inside
+  the project.
+  """
   @spec changes(Config.t()) :: Keyword.t()
   def changes(config) do
     manifest = read_manifest!()
@@ -35,6 +45,9 @@ defmodule Dialyzer.Plt.Manifest do
     ]
   end
 
+  @doc """
+  It updates the manifest file by saving the current enviroment.
+  """
   @spec update() :: none
   def update do
     apps = all_applications()
@@ -44,6 +57,9 @@ defmodule Dialyzer.Plt.Manifest do
     |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity))
   end
 
+  @doc """
+  It returns the path for the manifest file.
+  """
   @spec path() :: binary
   def path(), do: Plt.Path.generate_deps_plt_path() <> ".manifest"
 
