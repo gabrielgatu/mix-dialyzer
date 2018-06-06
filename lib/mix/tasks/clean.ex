@@ -49,7 +49,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
 
     logs =
       deletions
-      |> Enum.filter(& &1 != "")
+      |> Enum.filter(&(&1 != ""))
       |> Enum.join("\n")
 
     if info_active and logs != "" do
