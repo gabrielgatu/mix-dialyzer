@@ -43,31 +43,31 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Welcome to mix dialyzer! A tool for integrating dialyzer into a project and analyzing discrepances.
     Here are some infos about your system:
 
-    ## #{bright("Application name")}
+    #{yellow("## Application name")}
 
     #{application_name()}
 
-    ## #{bright("Applications included into analysis")}
+    #{yellow("## Applications included into analysis")}
 
     #{applications_analyzed(config)}
 
-    ## #{bright("Applications removed from analysis")}
+    #{yellow("## Applications removed from analysis")}
 
     #{applications_not_analyzed(config)}
 
-    ## #{bright("Warnings currently active")}
+    #{yellow("## Warnings currently active")}
 
     #{warnings_analyzed(config)}
 
-    ## #{bright("Warnings ignored")}
+    #{yellow("## Warnings ignored")}
 
     #{warnings_not_analyzed(config)}
 
-    ## #{bright("Build directories found")}
+    #{yellow("## Build directories found")}
 
     #{build_directories(config)}
 
-    ## #{bright("More infos")}
+    #{yellow("## More infos")}
 
     If you want to read more about dialyzer itself, here you can find some nice infos:
     - http://learnyousomeerlang.com/dialyzer A general guide to what dialyzer is and how it works
@@ -76,7 +76,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
   end
 
   defp application_name do
-    Dialyzer.Project.application() |> cyan()
+    cyan("#{inspect(Dialyzer.Project.application())}")
   end
 
   defp applications_analyzed(config) do
@@ -108,7 +108,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(apps, "", fn app, acc ->
       acc <>
         """
-          * #{cyan(app)}
+          #{cyan("* #{app}")}
         """
     end)
     |> case do
@@ -118,7 +118,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
       str ->
         """
 
-          ### #{bright(section_name)}
+          #{yellow("### #{section_name}")}
 
         """ <> str
     end
@@ -129,7 +129,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     |> Enum.reduce("", fn app, acc ->
       acc <>
         """
-          * #{cyan(app.app)}
+        #{cyan("* #{app.app}")}
         """
     end)
     |> case do
@@ -142,7 +142,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(config.warnings, "", fn warning, acc ->
       acc <>
         """
-          * `#{cyan(warning)}`: #{@warning_info[warning]}
+        #{cyan("* #{warning}")} - #{@warning_info[warning]}
 
         """
     end)
@@ -160,7 +160,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(warnings, "", fn warning, acc ->
       acc <>
         """
-          * `#{cyan(warning)}`: #{@warning_info[warning]}
+        #{cyan("* #{warning}")} - #{@warning_info[warning]}
 
         """
     end)
@@ -176,7 +176,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(config.build_dir, "", fn dir, acc ->
       acc <>
         """
-          - #{cyan(dir)}
+        #{cyan("* #{dir}")}
 
         """
     end)
@@ -184,11 +184,11 @@ defmodule Mix.Tasks.Dialyzer.Info do
     |> String.trim()
   end
 
-  defp bright(text) do
-    IO.ANSI.format([:bright, text], true)
+  defp yellow(item) do
+    IO.ANSI.format([:yellow, item], true)
   end
 
   defp cyan(item) do
-    IO.ANSI.format([:cyan, inspect(item)])
+    IO.ANSI.format([:cyan, item])
   end
 end
