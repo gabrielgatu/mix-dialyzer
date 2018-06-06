@@ -1,5 +1,6 @@
 defmodule Dialyzer.Plt.Builder do
   alias Dialyzer.{Config, Project, Plt}
+  require Logger
 
   @spec build(Config.t()) :: none
   def build(config) do
@@ -50,6 +51,7 @@ defmodule Dialyzer.Plt.Builder do
 
   @spec check_plts([Plt.t()], Plt.t() | nil) :: none
   defp check_plts([plt | rest], nil) do
+    ensure_dir_accessible!(plt.path)
     plt_files = collect_files_from_apps(plt.apps)
 
     Plt.Command.new(plt.path)
@@ -78,5 +80,16 @@ defmodule Dialyzer.Plt.Builder do
   @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()
   defp collect_files_from_apps(apps) do
     MapSet.new(Enum.flat_map(apps, & &1.files))
+  end
+
+  @spec ensure_dir_accessible!(String.t()) :: none
+  defp ensure_dir_accessible!(dir) do
+    case :filelib.ensure_dir(dir) do
+      :ok ->
+        nil
+
+      {:error, error} ->
+        raise "Could not access: #{Plt.Path.home_dir()}. Error: #{to_string(error)}"
+    end
   end
 end

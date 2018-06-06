@@ -10,21 +10,26 @@ defmodule Dialyzer.Plt.Path do
     elixir_version = System.version()
     build_env = get_build_env_tag()
 
-    "erlang-#{otp_version}_elixir-#{elixir_version}_deps-#{build_env}"
-    |> build_plt_abs_path()
-    |> Path.expand()
+    in_build_dir("erlang-#{otp_version}_elixir-#{elixir_version}_deps-#{build_env}")
   end
 
   @spec generate_elixir_plt_path() :: binary
   def generate_elixir_plt_path() do
-    build_plt_abs_path("erlang-#{get_otp_version()}_elixir-#{System.version()}")
+    in_home_dir("erlang-#{get_otp_version()}_elixir-#{System.version()}")
   end
 
   @spec generate_erlang_plt_path() :: binary
-  def generate_erlang_plt_path(), do: build_plt_abs_path("erlang-" <> get_otp_version())
+  def generate_erlang_plt_path() do
+    in_home_dir("erlang-#{get_otp_version()}")
+  end
+
+  @spec home_dir() :: binary
+  def home_dir do
+    Path.join([System.user_home(), ".cache", "dialyzer", "plts"])
+  end
 
   @spec get_otp_version() :: String.t()
-  defp get_otp_version() do
+  defp get_otp_version do
     "#{System.otp_release()}-erts-#{:erlang.system_info(:version)}"
   end
 
@@ -38,11 +43,17 @@ defmodule Dialyzer.Plt.Path do
     end
   end
 
-  @spec build_plt_abs_path(String.t()) :: binary
-  defp build_plt_abs_path(name) do
+  @spec in_build_dir(String.t()) :: binary
+  defp in_build_dir(name) do
     build_path = Mix.Project.build_path()
     plt_name = "dialyzer_#{name}.plt"
-
     Path.join(build_path, plt_name)
+  end
+
+  @spec in_home_dir(String.t()) :: binary
+  defp in_home_dir(name) do
+    home_path = home_dir()
+    plt_name = "dialyzer_#{name}.plt"
+    Path.join(home_path, plt_name)
   end
 end
