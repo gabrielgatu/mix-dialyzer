@@ -6,11 +6,7 @@ defmodule Dialyzer.Plt.Path do
   """
   @spec generate_deps_plt_path() :: binary
   def generate_deps_plt_path() do
-    otp_version = get_otp_version()
-    elixir_version = System.version()
-    build_env = get_build_env_tag()
-
-    in_build_dir("erlang-#{otp_version}_elixir-#{elixir_version}_deps-#{build_env}")
+    in_build_dir("erlang-#{get_otp_version()}_elixir-#{System.version()}_deps")
   end
 
   @doc """
@@ -34,22 +30,12 @@ defmodule Dialyzer.Plt.Path do
   """
   @spec home_dir() :: binary
   def home_dir do
-    Path.join([System.user_home(), ".cache", "dialyzer", "plts"])
+    Path.join([System.user_home(), ".cache", "dialyzer", "plt"])
   end
 
   @spec get_otp_version() :: String.t()
   defp get_otp_version do
     "#{System.otp_release()}-erts-#{:erlang.system_info(:version)}"
-  end
-
-  @spec get_build_env_tag() :: String.t()
-  defp get_build_env_tag() do
-    Mix.Project.config()
-    |> Keyword.fetch!(:build_per_environment)
-    |> case do
-      true -> Atom.to_string(Mix.env())
-      false -> "shared"
-    end
   end
 
   @spec in_build_dir(String.t()) :: binary

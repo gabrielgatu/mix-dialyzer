@@ -8,14 +8,12 @@ defmodule Dialyzer.Test.Util do
     {name, path}
   end
 
-  defp random_string(length) do
-    alphabet =
-      ?a..?z
-      |> Enum.into([])
-      |> to_string()
-      |> String.codepoints()
+  def random_string(length) do
+    alphabet = ?a..?z |> Enum.to_list()
 
-    Enum.reduce(1..length, [], fn _i, acc -> [Enum.random(alphabet) | acc] end)
-    |> Enum.join()
+    Enum.reduce((1..length), [], fn (_i, acc) ->
+      [Enum.random(alphabet) | acc]
+    end)
+    |> to_string()
   end
 end
