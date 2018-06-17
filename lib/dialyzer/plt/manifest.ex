@@ -124,7 +124,7 @@ defmodule Dialyzer.Plt.Manifest do
     Mix.Utils.extract_files(Project.build_paths(), [:beam])
     |> Enum.reduce(%{}, fn filepath, acc ->
       mod = filepath |> to_charlist() |> :beam_lib.info() |> Keyword.fetch!(:module)
-      [{_filepath, hash}] = :dialyzer_plt.compute_md5_from_files([to_charlist(filepath)])
+      hash = apply(mod, :module_info, [:md5])
 
       Map.put(acc, mod, hash)
     end)
