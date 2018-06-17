@@ -14,7 +14,7 @@ defmodule Dialyzer.Plt.Manifest do
   def status(config) do
     cond do
       not File.exists?(path()) -> :missing
-      not Plt.plts_exists?() -> :missing
+      Plt.missing_plts() != [] -> :missing
       [files: [added: [], removed: [], changed: []]] == changes(config) -> :up_to_date
       true -> :outdated
     end
@@ -63,7 +63,7 @@ defmodule Dialyzer.Plt.Manifest do
   It returns the path for the manifest file.
   """
   @spec path() :: binary
-  def path(), do: Plt.Path.generate_deps_plt_path() <> ".manifest"
+  def path(), do: Plt.Path.project_plt() <> ".manifest"
 
   @spec mods_added([Plt.App.t()], manifest) :: [atom]
   defp mods_added(apps, manifest) do
@@ -119,7 +119,7 @@ defmodule Dialyzer.Plt.Manifest do
     |> Enum.filter(&(not is_nil(&1)))
   end
 
-  @spec generate_hashes_for_builded_mods :: Map.t()
+  @spec generate_hashes_for_builded_mods :: map
   defp generate_hashes_for_builded_mods do
     Mix.Utils.extract_files(Project.build_paths(), [:beam])
     |> Enum.reduce(%{}, fn filepath, acc ->

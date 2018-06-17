@@ -67,7 +67,7 @@ defmodule Dialyzer.Config do
 
   @spec read_config_file(binary) :: t
   defp read_config_file(content) do
-    init_plt = Plt.Path.generate_deps_plt_path()
+    init_plt = Plt.Path.project_plt()
     build_dir = content[:extra_build_dir] ++ Project.build_paths()
     warnings = content[:warnings]
     remove_apps = content[:apps][:remove]

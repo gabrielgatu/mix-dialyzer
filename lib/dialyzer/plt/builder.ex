@@ -8,79 +8,75 @@ defmodule Dialyzer.Plt.Builder do
   """
   @spec build(Config.t()) :: none
   def build(config) do
-    config |> plts_list() |> check_plts()
+    Plt.missing_plts() |> Enum.each(&build_plt(&1, config))
   end
 
   @doc """
-  Generates a list of 3 elements.
-  The first element referes to the erlang plt,
-  the second element referes to the elixir plt and
-  the third element referes to the project level plt.
+  It returns the apps used to build the erlang plt.
   """
-  @spec plts_list(Config.t()) :: [Plt.t()]
-  def plts_list(config) do
+  @spec erlang_apps :: [atom]
+  def erlang_apps, do: [:erts, :kernel, :stdlib, :crypto]
+
+  @doc """
+  It returns the apps used to build the elixir plt.
+  """
+  @spec elixir_apps :: [atom]
+  def elixir_apps, do: erlang_apps() ++ [:elixir]
+
+  @doc """
+  It returns the apps used to build the project plt.
+  """
+  @spec project_apps(Config.t()) :: [atom]
+  def project_apps(config) do
     removed_apps = config.apps[:remove]
     included_apps = config.apps[:include]
 
-    erlang_apps = [:erts, :kernel, :stdlib, :crypto] -- removed_apps
-    elixir_apps = ([:elixir] ++ erlang_apps) -- removed_apps
-
-    project_apps =
-      Project.dependencies()
-      |> Kernel.++([Project.application()])
-      |> Kernel.++(elixir_apps)
-      |> Kernel.++(erlang_apps)
-      |> Kernel.++(included_apps)
-      |> Kernel.--(removed_apps)
-
-    [
-      %Plt{
-        name: :erlang,
-        path: Plt.Path.generate_erlang_plt_path(),
-        apps: Enum.map(erlang_apps, &Plt.App.info/1)
-      },
-      %Plt{
-        name: :elixir,
-        path: Plt.Path.generate_elixir_plt_path(),
-        apps: Enum.map(elixir_apps, &Plt.App.info/1)
-      },
-      %Plt{
-        name: :project,
-        path: Plt.Path.generate_deps_plt_path(),
-        apps: Enum.map(project_apps, &Plt.App.info/1)
-      }
-    ]
+    Project.dependencies()
+    |> Kernel.++([Project.application()])
+    |> Kernel.++(elixir_apps())
+    |> Kernel.++(included_apps)
+    |> Kernel.--(removed_apps)
   end
 
-  defp check_plts(plts), do: check_plts(plts, nil)
-  defp check_plts([], _), do: nil
+  @spec build_plt(atom, Config.t()) :: none
+  defp build_plt(:erlang, _config) do
+    path = Plt.Path.erlang_plt()
+    apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
+    prev_plt_apps = []
 
-  @spec check_plts([Plt.t()], Plt.t() | nil) :: none
-  defp check_plts([plt | rest], nil) do
-    ensure_dir_accessible!(plt.path)
-    plt_files = collect_files_from_apps(plt.apps)
-
-    Plt.Command.new(plt.path)
-    Plt.Command.add(plt.path, plt_files)
-    Plt.Command.check(plt.path)
-
-    check_plts(rest, plt)
+    build_plt(path, apps, prev_plt_apps)
   end
 
-  defp check_plts([plt | rest], prev_plt) do
-    Plt.Command.copy(prev_plt.path, plt.path)
+  defp build_plt(:elixir, _config) do
+    path = Plt.Path.elixir_plt()
+    apps = elixir_apps() |> Enum.map(&Plt.App.info/1)
+    prev_plt_apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
 
-    plt_files = collect_files_from_apps(plt.apps)
-    prev_plt_files = collect_files_from_apps(prev_plt.apps)
+    Plt.Command.copy(Plt.Path.erlang_plt(), path)
+    build_plt(path, apps, prev_plt_apps)
+  end
+
+  defp build_plt(:project, config) do
+    path = Plt.Path.project_plt()
+    apps = project_apps(config) |> Enum.map(&Plt.App.info/1)
+    prev_plt_apps = elixir_apps() |> Enum.map(&Plt.App.info/1)
+
+    Plt.Command.copy(Plt.Path.elixir_plt(), path)
+    build_plt(path, apps, prev_plt_apps)
+  end
+
+  defp build_plt(path, apps, prev_plt_apps) do
+    ensure_dir_accessible!(path)
+
+    plt_files = collect_files_from_apps(apps)
+    prev_plt_files = collect_files_from_apps(prev_plt_apps)
 
     remove = MapSet.difference(prev_plt_files, plt_files)
     add = MapSet.difference(plt_files, prev_plt_files)
 
-    Plt.Command.remove(plt.path, remove)
-    Plt.Command.add(plt.path, add)
-    Plt.Command.check(plt.path)
-
-    check_plts(rest, plt)
+    Plt.Command.remove(path, remove)
+    Plt.Command.add(path, add)
+    Plt.Command.check(path)
   end
 
   @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()

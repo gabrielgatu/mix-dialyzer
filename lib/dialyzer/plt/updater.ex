@@ -8,7 +8,7 @@ defmodule Dialyzer.Plt.Updater do
   @spec update(Config.t()) :: none
   def update(config) do
     changes = Plt.Manifest.changes(config)
-    plt = Plt.Path.generate_deps_plt_path()
+    plt = Plt.Path.project_plt()
 
     removed_files = changes[:files][:removed] ++ changes[:files][:changed]
     added_files = changes[:files][:changed] ++ changes[:files][:added]

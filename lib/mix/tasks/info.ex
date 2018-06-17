@@ -80,28 +80,14 @@ defmodule Mix.Tasks.Dialyzer.Info do
   end
 
   defp applications_analyzed(config) do
-    config
-    |> Dialyzer.Plt.Builder.plts_list()
-    |> Enum.reduce({"", nil}, fn plt, {str, prev_plt} ->
-      section_name =
-        [
-          erlang: "Erlang applications",
-          elixir: "Elixir applications",
-          project: "Project applications"
-        ][plt.name]
+    erlang_apps = Dialyzer.Plt.Builder.erlang_apps()
+    elixir_apps = Dialyzer.Plt.Builder.elixir_apps() -- erlang_apps
+    project_apps = Dialyzer.Plt.Builder.project_apps(config) -- elixir_apps
 
-      apps =
-        prev_plt
-        |> case do
-          nil -> plt.apps
-          prev_plt -> plt.apps -- prev_plt.apps
-        end
-        |> Enum.map(& &1.app)
-
-      str = str <> format_applications_analyzed_section(section_name, apps)
-      {str, plt}
-    end)
-    |> elem(0)
+    str = format_applications_analyzed_section("Erlang applications", erlang_apps)
+    str = str <> format_applications_analyzed_section("Elixir applications", elixir_apps)
+    str = str <> format_applications_analyzed_section("Project applications", project_apps)
+    str
   end
 
   defp format_applications_analyzed_section(section_name, apps) do

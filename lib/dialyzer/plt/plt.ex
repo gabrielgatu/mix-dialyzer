@@ -28,15 +28,15 @@ defmodule Dialyzer.Plt do
   end
 
   @doc """
-  It checks that all plt's exists, otherwise returns false.
+  It returns which plts are missing, that need to be built.
   """
-  @spec plts_exists?() :: boolean
-  def plts_exists? do
-    [
-      Plt.Path.generate_erlang_plt_path(),
-      Plt.Path.generate_elixir_plt_path(),
-      Plt.Path.generate_deps_plt_path()
-    ]
-    |> Enum.all?(&File.exists?/1)
+  @spec missing_plts() :: [atom]
+  def missing_plts do
+    cond do
+      not File.exists?(Plt.Path.erlang_plt()) -> [:erlang, :elixir, :project]
+      not File.exists?(Plt.Path.elixir_plt()) -> [:elixir, :project]
+      not File.exists?(Plt.Path.project_plt()) -> [:project]
+      true -> []
+    end
   end
 end

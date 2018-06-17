@@ -42,7 +42,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
     all_active = Keyword.get(opts, :all, false)
 
     deletions = [
-      delete_file(Plt.Path.generate_deps_plt_path()),
+      delete_file(Plt.Path.project_plt()),
       delete_file(Plt.Manifest.path()),
       if(all_active, do: delete_folder(Plt.Path.home_dir()), else: "")
     ]

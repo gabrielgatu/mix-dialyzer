@@ -51,7 +51,7 @@ defmodule Dialyzer.ConfigTest do
       File.cd!(path, fn ->
         config = Config.load()
         assert config.apps == [remove: [], include: []]
-        assert config.init_plt == Plt.Path.generate_deps_plt_path()
+        assert config.init_plt == Plt.Path.project_plt()
         assert config.warnings == Config.default_warnings()
       end)
     end

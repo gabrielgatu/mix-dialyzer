@@ -4,24 +4,24 @@ defmodule Dialyzer.Plt.Path do
   erlang, and deps). The path is referring to a location inside the build dir of the project,
   since the plt is going to be saved there.
   """
-  @spec generate_deps_plt_path() :: binary
-  def generate_deps_plt_path() do
+  @spec project_plt() :: binary
+  def project_plt() do
     in_build_dir("erlang-#{get_otp_version()}_elixir-#{System.version()}_deps")
   end
 
   @doc """
   It returns the path for the elixir plt.
   """
-  @spec generate_elixir_plt_path() :: binary
-  def generate_elixir_plt_path() do
+  @spec elixir_plt() :: binary
+  def elixir_plt() do
     in_home_dir("erlang-#{get_otp_version()}_elixir-#{System.version()}")
   end
 
   @doc """
   It returns the path for the erlang plt.
   """
-  @spec generate_erlang_plt_path() :: binary
-  def generate_erlang_plt_path() do
+  @spec erlang_plt() :: binary
+  def erlang_plt() do
     in_home_dir("erlang-#{get_otp_version()}")
   end
 
