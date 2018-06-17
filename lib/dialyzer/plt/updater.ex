@@ -10,10 +10,8 @@ defmodule Dialyzer.Plt.Updater do
     changes = Plt.Manifest.changes(config)
     plt = Plt.Path.generate_deps_plt_path()
 
-    removed_files =
-      Enum.flat_map(changes[:apps][:removed] ++ changes[:apps][:changed], & &1.files)
-
-    added_files = Enum.flat_map(changes[:apps][:changed] ++ changes[:apps][:added], & &1.files)
+    removed_files = changes[:files][:removed] ++ changes[:files][:changed]
+    added_files = changes[:files][:changed] ++ changes[:files][:added]
 
     Plt.Command.remove(plt, removed_files)
     Plt.Command.add(plt, added_files)

@@ -1,5 +1,5 @@
 defmodule Dialyzer.Plt.App do
-  defstruct [:app, :mods, :files, :vsn]
+  defstruct [:app, :mods, :vsn]
 
   alias Dialyzer.Plt.App
 
@@ -29,7 +29,6 @@ defmodule Dialyzer.Plt.App do
       true ->
         app
         |> read_app_info()
-        |> find_beam_files()
     end
   end
 
@@ -47,26 +46,8 @@ defmodule Dialyzer.Plt.App do
     info = Application.spec(app)
     mods = info[:modules]
     vsn = info[:vsn]
+
     %App{app: app, mods: mods, vsn: vsn}
-  end
-
-  @spec find_beam_files(t) :: t
-  defp find_beam_files(app) do
-    Enum.reduce(app.mods, app, fn mod, app ->
-      mod
-      |> Atom.to_charlist()
-      |> Kernel.++('.beam')
-      |> :code.where_is_file()
-      |> case do
-        path when is_list(path) ->
-          path = Path.expand(path)
-          files = app.files || []
-          %App{app | files: [path | files]}
-
-        :non_existing ->
-          app
-      end
-    end)
   end
 end
 
