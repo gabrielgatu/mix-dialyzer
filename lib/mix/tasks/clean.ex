@@ -52,18 +52,20 @@ defmodule Mix.Tasks.Dialyzer.Clean do
       |> Enum.filter(&(&1 != ""))
       |> Enum.join("\n")
 
-    if info_active and logs != "" do
-      Mix.shell().info("""
+    if info_active do
+      if logs != "" do
+        Mix.shell().info("""
 
-      #{yellow("## Files deleted")}
-      """)
+        #{yellow("## Files deleted")}
+        """)
 
-      Mix.shell().info(logs)
-    else
-      Mix.shell().info("""
+        Mix.shell().info(logs)
+      else
+        Mix.shell().info("""
 
-      #{yellow("## No files to delete")}
-      """)
+        #{yellow("## No files to delete")}
+        """)
+      end
     end
   end
 
