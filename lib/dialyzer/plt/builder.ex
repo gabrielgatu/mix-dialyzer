@@ -85,7 +85,8 @@ defmodule Dialyzer.Plt.Builder do
 
   @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()
   defp collect_files_from_apps(apps) do
-    MapSet.new(Enum.flat_map(apps, & &1.files))
+    Enum.flat_map(apps, &Plt.App.files(&1.mods))
+    |> MapSet.new()
   end
 
   @spec ensure_dir_accessible!(String.t()) :: none

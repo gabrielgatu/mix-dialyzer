@@ -33,9 +33,9 @@ defmodule Dialyzer.Plt.Manifest do
       |> Kernel.++(Enum.map(config.apps[:include], &Plt.App.info/1))
       |> Kernel.--(Enum.map(config.apps[:remove], &Plt.App.info/1))
 
-    files_added = mods_added(apps, manifest) |> Enum.map(&(:code.which(&1)))
-    files_removed = mods_removed(apps, manifest) |> Enum.map(&(:code.which(&1)))
-    files_changed = mods_changed(apps, manifest) |> Enum.map(&(:code.which(&1)))
+    files_added = mods_added(apps, manifest) |> Plt.App.files()
+    files_removed = mods_removed(apps, manifest) |> Plt.App.files()
+    files_changed = mods_changed(apps, manifest) |> Plt.App.files()
 
     [
       files: [
@@ -73,7 +73,7 @@ defmodule Dialyzer.Plt.Manifest do
       {app, manifest_app}
     end)
     |> Stream.filter(fn {_app, manifest_app} -> manifest_app == nil end)
-    |> Stream.flat_map(&(&1.mods))
+    |> Stream.flat_map(& &1.mods)
     |> Enum.to_list()
   end
 
@@ -85,7 +85,7 @@ defmodule Dialyzer.Plt.Manifest do
       {app, manifest_app}
     end)
     |> Stream.filter(fn {_app, manifest_app} -> manifest_app != nil end)
-    |> Stream.transform([], fn ({app, manifest_app}, acc) ->
+    |> Stream.transform([], fn {app, manifest_app}, acc ->
       case app.vsn == manifest_app.vsn do
         true -> {filter_modules_changed(app.mods, manifest) ++ acc, acc}
         false -> {app.mods ++ acc, acc}
@@ -100,7 +100,7 @@ defmodule Dialyzer.Plt.Manifest do
     |> Stream.filter(fn manifest_app ->
       not Enum.any?(apps, &(&1.app == manifest_app.app))
     end)
-    |> Stream.flat_map(&(&1.mods))
+    |> Stream.flat_map(& &1.mods)
     |> Enum.to_list()
   end
 

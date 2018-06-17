@@ -3,15 +3,13 @@ defmodule Dialyzer.Plt.Command do
 
   @doc """
   It creates a new plt basic plt inside the path passed.
-  Since dialyzer requires at least one application, it uses :erts
-  as a default and automatically included application.
   """
   @spec new(binary) :: none
   def new(plt_path) do
     Logger.info("Creating #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
-    run(analysis_type: :plt_build, output_plt: plt_path, apps: [:erts])
+    run(analysis_type: :plt_build, output_plt: plt_path)
   end
 
   @doc """
@@ -66,8 +64,11 @@ defmodule Dialyzer.Plt.Command do
     try do
       :dialyzer.run([check_plt: false] ++ opts)
     catch
-      {:dialyzer_error, msg} ->
-        Logger.error(":dialyzer.run error: #{msg}")
+      {:dialyzer_error, _msg} ->
+        # TODO: when creating a plt without an app, this logs an error.
+        # suppress for now, but remember to handle this case.
+        # Logger.error(":dialyzer.run error: #{msg}")
+        nil
     end
   end
 end

@@ -15,6 +15,20 @@ defmodule Dialyzer.Plt.App do
   def info(app), do: get_info(app, true)
   def info(app, use_cached_version), do: get_info(app, use_cached_version)
 
+  @doc """
+  It returns all the filepaths of the modules passed.
+  It discards modules which give an error when loading.
+  """
+  @spec files([atom]) :: list
+  def files(mods) do
+    Enum.reduce(mods, [], fn mod, acc ->
+      case :code.which(mod) do
+        status when is_atom(status) -> acc
+        filepath -> [filepath | acc]
+      end
+    end)
+  end
+
   @spec get_info(atom, boolean) :: t | nil
   defp get_info(app, true) do
     App.Cache.get_or_insert(app)

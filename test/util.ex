@@ -11,7 +11,7 @@ defmodule Dialyzer.Test.Util do
   def random_string(length) do
     alphabet = ?a..?z |> Enum.to_list()
 
-    Enum.reduce((1..length), [], fn (_i, acc) ->
+    Enum.reduce(1..length, [], fn _i, acc ->
       [Enum.random(alphabet) | acc]
     end)
     |> to_string()
