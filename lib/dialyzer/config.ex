@@ -1,7 +1,7 @@
 defmodule Dialyzer.Config do
-  defstruct [:init_plt, build_dir: [], warnings: [], apps: [remove: [], include: []]]
-  require Logger
+  defstruct [:init_plt, build_dir: [], warnings: [], apps: [remove: [], include: []], cmd: nil]
 
+  import Dialyzer.Logger
   alias Dialyzer.{CommandLine, Project, Plt}
   alias __MODULE__
 
@@ -14,12 +14,14 @@ defmodule Dialyzer.Config do
   """
   @spec load() :: Config.t()
   def load() do
-    load_config_file()
+    config = load_config_file()
+    %Config{config | cmd: %CommandLine.Config{}}
   end
 
   @spec load(CommandLine.Config.t()) :: Config.t()
-  def load(_cmd_config) do
-    load_config_file()
+  def load(cmd_config) do
+    config = load_config_file()
+    %Config{config | cmd: cmd_config}
   end
 
   @doc """
@@ -55,7 +57,7 @@ defmodule Dialyzer.Config do
         |> read_config_file()
 
       {:error, _} ->
-        Logger.info(
+        info(
           "Dialyzer: configuration file not found. Creating it right now at .dialyzer.exs"
         )
 

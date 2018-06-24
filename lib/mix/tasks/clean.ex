@@ -28,7 +28,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
   """
 
   use Mix.Task
-  require Logger
+  import Dialyzer.Logger
   alias Dialyzer.Plt
 
   @command_options [
@@ -56,14 +56,14 @@ defmodule Mix.Tasks.Dialyzer.Clean do
       if logs != "" do
         Mix.shell().info("""
 
-        #{yellow("## Files deleted")}
+        #{color(:yellow, "## Files deleted")}
         """)
 
         Mix.shell().info(logs)
       else
         Mix.shell().info("""
 
-        #{yellow("## No files to delete")}
+        #{color(:yellow, "## No files to delete")}
         """)
       end
     end
@@ -74,7 +74,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
     case File.rm(filepath) do
       :ok ->
         """
-        #{cyan("* success")} - #{filepath}
+        #{color(:cyan, "* success")} - #{filepath}
         """
 
       {:error, :enoent} ->
@@ -82,7 +82,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
 
       {:error, reason} ->
         """
-        #{cyan("* failure")} - error during deletion of #{filepath}: #{yellow(inspect(reason))}
+        #{color(:cyan, "* failure")} - error during deletion of #{filepath}: #{color(:yellow, inspect(reason))}
         """
     end
   end
@@ -94,7 +94,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
         files
         |> Enum.map(fn filepath ->
           """
-          #{cyan("* success")} - #{filepath}
+          #{color(:cyan, "* success")} - #{filepath}
           """
         end)
         |> Enum.join("\n")
@@ -104,16 +104,8 @@ defmodule Mix.Tasks.Dialyzer.Clean do
 
       {:error, reason, filepath} ->
         """
-        #{cyan("* failure")} - error during deletion of #{filepath}: #{yellow(inspect(reason))}
+        #{color(:cyan, "* failure")} - error during deletion of #{filepath}: #{color(:yellow, inspect(reason))}
         """
     end
-  end
-
-  defp cyan(item) do
-    IO.ANSI.format([:cyan, item])
-  end
-
-  defp yellow(item) do
-    IO.ANSI.format([:yellow, item])
   end
 end

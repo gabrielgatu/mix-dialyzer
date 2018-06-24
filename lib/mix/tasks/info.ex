@@ -2,7 +2,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
   @shortdoc "Gets informations about the dialyzer enviroment"
 
   use Mix.Task
-  require Logger
+  import Dialyzer.Logger
 
   @warning_info [
     error_handling: "Include warnings for functions that only return by an exception.",
@@ -43,31 +43,31 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Welcome to mix dialyzer! A tool for integrating dialyzer into a project and analyzing discrepances.
     Here are some infos about your system:
 
-    #{yellow("## Application name")}
+    #{color(:yellow, "## Application name")}
 
     #{application_name()}
 
-    #{yellow("## Applications included into analysis")}
+    #{color(:yellow, "## Applications included into analysis")}
 
     #{applications_analyzed(config)}
 
-    #{yellow("## Applications removed from analysis")}
+    #{color(:yellow, "## Applications removed from analysis")}
 
     #{applications_not_analyzed(config)}
 
-    #{yellow("## Warnings currently active")}
+    #{color(:yellow, "## Warnings currently active")}
 
     #{warnings_analyzed(config)}
 
-    #{yellow("## Warnings ignored")}
+    #{color(:yellow, "## Warnings ignored")}
 
     #{warnings_not_analyzed(config)}
 
-    #{yellow("## Build directories found")}
+    #{color(:yellow, "## Build directories found")}
 
     #{build_directories(config)}
 
-    #{yellow("## More infos")}
+    #{color(:yellow, "## More infos")}
 
     If you want to read more about dialyzer itself, here you can find some nice infos:
     - http://learnyousomeerlang.com/dialyzer A general guide to what dialyzer is and how it works
@@ -76,7 +76,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
   end
 
   defp application_name do
-    cyan("#{inspect(Dialyzer.Project.application())}")
+    color(:cyan, "#{inspect(Dialyzer.Project.application())}")
   end
 
   defp applications_analyzed(config) do
@@ -94,7 +94,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(apps, "", fn app, acc ->
       acc <>
         """
-          #{cyan("* #{app}")}
+          #{color(:cyan, "* #{app}")}
         """
     end)
     |> case do
@@ -104,7 +104,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
       str ->
         """
 
-          #{yellow("### #{section_name}")}
+          #{color(:yellow, "### #{section_name}")}
 
         """ <> str
     end
@@ -115,7 +115,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     |> Enum.reduce("", fn app, acc ->
       acc <>
         """
-        #{cyan("* #{app.app}")}
+        #{color(:cyan, "* #{app.app}")}
         """
     end)
     |> case do
@@ -128,7 +128,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(config.warnings, "", fn warning, acc ->
       acc <>
         """
-        #{cyan("* #{warning}")} - #{@warning_info[warning]}
+        #{color(:cyan, "* #{warning}")} - #{@warning_info[warning]}
 
         """
     end)
@@ -146,7 +146,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(warnings, "", fn warning, acc ->
       acc <>
         """
-        #{cyan("* #{warning}")} - #{@warning_info[warning]}
+        #{color(:cyan, "* #{warning}")} - #{@warning_info[warning]}
 
         """
     end)
@@ -162,19 +162,10 @@ defmodule Mix.Tasks.Dialyzer.Info do
     Enum.reduce(config.build_dir, "", fn dir, acc ->
       acc <>
         """
-        #{cyan("* #{dir}")}
+        #{color(:cyan, "* #{dir}")}
 
         """
     end)
-    # To eliminate blank line at the end
     |> String.trim()
-  end
-
-  defp yellow(item) do
-    IO.ANSI.format([:yellow, item], true)
-  end
-
-  defp cyan(item) do
-    IO.ANSI.format([:cyan, item])
   end
 end

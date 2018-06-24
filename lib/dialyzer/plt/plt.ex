@@ -1,6 +1,6 @@
 defmodule Dialyzer.Plt do
   alias Dialyzer.{Config, Plt}
-  require Logger
+  import Dialyzer.Logger
 
   defstruct [:name, :path, :apps]
 
@@ -14,14 +14,14 @@ defmodule Dialyzer.Plt do
   def ensure_loaded(config) do
     case Plt.Manifest.status(config) do
       :up_to_date ->
-        Logger.info("Plt's are all up to date")
+        info("Plt's are all up to date")
 
       :outdated ->
-        Logger.info("Updating outdated plts")
+        info("Updating outdated plts")
         Plt.Updater.update(config)
 
       :missing ->
-        Logger.info("Creating plts for the first time")
+        info("Creating one or more missing plt.")
         Plt.Builder.build(config)
         Plt.Manifest.update()
     end

@@ -1,12 +1,12 @@
 defmodule Dialyzer.Plt.Command do
-  require Logger
+  import Dialyzer.Logger
 
   @doc """
   It creates a new plt basic plt inside the path passed.
   """
   @spec new(binary) :: none
   def new(plt_path) do
-    Logger.info("Creating #{Path.basename(plt_path)}")
+    info("Creating #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
     run(analysis_type: :plt_build, output_plt: plt_path)
@@ -17,7 +17,7 @@ defmodule Dialyzer.Plt.Command do
   """
   @spec copy(binary, binary) :: none
   def copy(plt_path, new_plt_path) do
-    Logger.info("Copying #{Path.basename(plt_path)} to #{Path.basename(new_plt_path)}")
+    info("Copying #{Path.basename(plt_path)} to #{Path.basename(new_plt_path)}")
     File.cp!(plt_path, new_plt_path)
   end
 
@@ -26,7 +26,7 @@ defmodule Dialyzer.Plt.Command do
   """
   @spec add(binary, [binary]) :: none
   def add(plt_path, files) do
-    Logger.info("Adding modules to #{Path.basename(plt_path)}")
+    info("Adding modules to #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
     files = Enum.map(files, &to_charlist/1)
@@ -38,7 +38,7 @@ defmodule Dialyzer.Plt.Command do
   """
   @spec remove(binary, [binary]) :: none
   def remove(plt_path, files) do
-    Logger.info("Removing modules from #{Path.basename(plt_path)}")
+    info("Removing modules from #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
     files = Enum.map(files, &to_charlist/1)
@@ -50,7 +50,7 @@ defmodule Dialyzer.Plt.Command do
   """
   @spec check(binary) :: none
   def check(plt_path) do
-    Logger.info("Checking modules in #{Path.basename(plt_path)}")
+    info("Checking modules in #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
     run(analysis_type: :plt_check, init_plt: plt_path)

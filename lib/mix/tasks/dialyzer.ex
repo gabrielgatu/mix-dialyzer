@@ -7,16 +7,17 @@ defmodule Mix.Tasks.Dialyzer do
     Mix.Project.compile([])
     Application.ensure_started(:mix_dialyzer)
 
-    config =
+    warnings =
       args
       |> Dialyzer.CommandLine.Config.parse()
       |> Dialyzer.Config.load()
+      |> Dialyzer.run()
 
-    Dialyzer.Plt.ensure_loaded(config)
-    Dialyzer.run(config) |> IO.inspect()
+    IO.puts("\n")
 
-    # IO.puts("Starting Dialyzer")
-    # {_, exit_status, result} = Dialyzer.dialyze(args)
-    # Enum.each(result, &IO.puts/1)
+    warnings
+    |> Enum.each(fn message ->
+      IO.puts(message)
+    end)
   end
 end
