@@ -1,7 +1,7 @@
 defmodule Dialyzer.Plt.App do
   defstruct [:app, :mods, :vsn]
 
-  alias Dialyzer.Plt.App
+  alias __MODULE__
 
   @type t :: %App{}
 
@@ -14,20 +14,6 @@ defmodule Dialyzer.Plt.App do
   @spec get_info(atom, boolean) :: t | nil
   def info(app), do: get_info(app, true)
   def info(app, use_cached_version), do: get_info(app, use_cached_version)
-
-  @doc """
-  It returns all the filepaths of the modules passed.
-  It discards modules which give an error when loading.
-  """
-  @spec files([atom]) :: list
-  def files(mods) do
-    Enum.reduce(mods, [], fn mod, acc ->
-      case :code.which(mod) do
-        status when is_atom(status) -> acc
-        filepath -> [filepath | acc]
-      end
-    end)
-  end
 
   @spec get_info(atom, boolean) :: t | nil
   defp get_info(app, true) do
@@ -58,12 +44,28 @@ defmodule Dialyzer.Plt.App do
   @spec read_app_info(atom) :: t
   defp read_app_info(app) do
     info = Application.spec(app)
-    mods = info[:modules]
+    mods = Enum.map(info[:modules], &App.Module.new/1)
     vsn = info[:vsn]
 
     %App{app: app, mods: mods, vsn: vsn}
   end
 end
+
+defmodule Dialyzer.Plt.App.Module do
+  defstruct [:module, :filepath, :md5]
+  alias __MODULE__
+
+  @type t :: %__MODULE__{}
+
+  @spec new(atom) :: t
+  def new(mod) when is_atom(mod) do
+    filepath = :code.which(mod)
+    md5 = apply(mod, :module_info, [:md5])
+
+    %Module{module: mod, filepath: filepath, md5: md5}
+  end
+end
+
 
 defmodule Dialyzer.Plt.App.Cache do
   use Agent

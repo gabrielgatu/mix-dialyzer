@@ -33,9 +33,9 @@ defmodule Dialyzer.Plt.Manifest do
       |> Kernel.++(Enum.map(config.apps[:include], &Plt.App.info/1))
       |> Kernel.--(Enum.map(config.apps[:remove], &Plt.App.info/1))
 
-    files_added = mods_added(apps, manifest) |> Plt.App.files()
-    files_removed = mods_removed(apps, manifest) |> Plt.App.files()
-    files_changed = mods_changed(apps, manifest) |> Plt.App.files()
+    files_added = files_added(apps, manifest)
+    files_removed = files_removed(apps, manifest)
+    files_changed = files_changed(apps, manifest)
 
     [
       files: [
@@ -52,8 +52,7 @@ defmodule Dialyzer.Plt.Manifest do
   @spec update() :: none
   def update do
     apps = all_applications()
-    hashes = generate_hashes_for_builded_mods()
-    content = [apps: apps, hashes: hashes]
+    content = [apps: apps]
 
     path()
     |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity))
@@ -65,8 +64,8 @@ defmodule Dialyzer.Plt.Manifest do
   @spec path() :: binary
   def path(), do: Plt.Path.project_plt() <> ".manifest"
 
-  @spec mods_added([Plt.App.t()], manifest) :: [atom]
-  defp mods_added(apps, manifest) do
+  @spec files_added([Plt.App.t()], manifest) :: [atom]
+  defp files_added(apps, manifest) do
     apps
     |> Stream.map(fn app ->
       manifest_app = Enum.find(manifest[:apps], &(&1.app == app.app))
@@ -74,11 +73,12 @@ defmodule Dialyzer.Plt.Manifest do
     end)
     |> Stream.filter(fn {_app, manifest_app} -> manifest_app == nil end)
     |> Stream.flat_map(& &1.mods)
+    |> Stream.map(& &1.filepath)
     |> Enum.to_list()
   end
 
-  @spec mods_changed([Plt.App.t()], manifest) :: [atom]
-  defp mods_changed(apps, manifest) do
+  @spec files_changed([Plt.App.t()], manifest) :: [atom]
+  defp files_changed(apps, manifest) do
     apps
     |> Stream.map(fn app ->
       manifest_app = Enum.find(manifest[:apps], &(&1.app == app.app))
@@ -87,20 +87,32 @@ defmodule Dialyzer.Plt.Manifest do
     |> Stream.filter(fn {_app, manifest_app} -> manifest_app != nil end)
     |> Stream.transform([], fn {app, manifest_app}, acc ->
       case app.vsn == manifest_app.vsn do
-        true -> {filter_modules_changed(app.mods, manifest) ++ acc, acc}
+        true -> {filter_modules_changed(app) ++ acc, acc}
         false -> {app.mods ++ acc, acc}
       end
     end)
+    |> Stream.map(& &1.filepath)
     |> Enum.to_list()
   end
 
-  @spec mods_removed([Plt.App.t()], manifest) :: [atom]
-  defp mods_removed(apps, manifest) do
+  @spec files_removed([Plt.App.t()], manifest) :: [atom]
+  defp files_removed(apps, manifest) do
     manifest[:apps]
-    |> Stream.filter(fn manifest_app ->
-      not Enum.any?(apps, &(&1.app == manifest_app.app))
+    |> Stream.map(fn manifest_app ->
+      app = Enum.find(apps, &(&1.app == manifest_app.app))
+      {app, manifest_app}
     end)
-    |> Stream.flat_map(& &1.mods)
+    |> Stream.transform([], fn {app, manifest_app}, acc ->
+      case {app, manifest_app} do
+        {nil, manifest_app} ->
+          {manifest_app.mods ++ acc, acc}
+
+        {app, manifest_app} ->
+          removed_mods = manifest_app.mods -- app.mods
+          {removed_mods ++ acc, acc}
+      end
+    end)
+    |> Stream.map(& &1.filepath)
     |> Enum.to_list()
   end
 
@@ -119,28 +131,24 @@ defmodule Dialyzer.Plt.Manifest do
     |> Enum.filter(&(not is_nil(&1)))
   end
 
-  @spec generate_hashes_for_builded_mods :: map
-  defp generate_hashes_for_builded_mods do
-    Mix.Utils.extract_files(Project.build_paths(), [:beam])
-    |> Enum.reduce(%{}, fn filepath, acc ->
-      mod = filepath |> to_charlist() |> :beam_lib.info() |> Keyword.fetch!(:module)
-      hash = apply(mod, :module_info, [:md5])
+  @spec filter_modules_changed(Plt.App.t()) :: [atom]
+  defp filter_modules_changed(app) do
+    compiled_mods_with_md5 =
+      Mix.Utils.extract_files(Project.build_paths(), [:beam])
+      |> Enum.reduce(%{}, fn filepath, acc ->
+        mod = filepath |> to_charlist() |> :beam_lib.info() |> Keyword.fetch!(:module)
+        md5 = apply(mod, :module_info, [:md5])
 
-      Map.put(acc, mod, hash)
-    end)
-  end
+        Map.put(acc, mod, md5)
+      end)
 
-  @spec filter_modules_changed([atom], manifest) :: [atom]
-  defp filter_modules_changed(mods, manifest) do
-    hashes = generate_hashes_for_builded_mods()
-
-    Enum.filter(mods, fn mod ->
-      case Map.fetch(hashes, mod) do
+    Enum.filter(app.mods, fn mod ->
+      case Map.fetch(compiled_mods_with_md5, mod) do
         :error ->
           false
 
         {:ok, hash} ->
-          Map.get(manifest[:hashes], mod) != hash
+          mod.md5 != hash
       end
     end)
   end
