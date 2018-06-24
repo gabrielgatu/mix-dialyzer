@@ -9,7 +9,7 @@ defmodule Dialyzer.Plt.Command do
     info("Creating #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
-    run(analysis_type: :plt_build, output_plt: plt_path)
+    run(analysis_type: :plt_build, output_plt: plt_path, apps: [:erts])
   end
 
   @doc """
@@ -64,11 +64,10 @@ defmodule Dialyzer.Plt.Command do
     try do
       :dialyzer.run([check_plt: false] ++ opts)
     catch
-      {:dialyzer_error, _msg} ->
+      {:dialyzer_error, msg} ->
         # TODO: when creating a plt without an app, this logs an error.
         # suppress for now, but remember to handle this case.
-        # Logger.error(":dialyzer.run error: #{msg}")
-        nil
+        error(":dialyzer.run error: #{msg}")
     end
   end
 end

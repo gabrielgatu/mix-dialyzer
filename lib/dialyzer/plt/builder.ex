@@ -8,7 +8,8 @@ defmodule Dialyzer.Plt.Builder do
   """
   @spec build(Config.t()) :: none
   def build(config) do
-    Plt.missing_plts() |> Enum.each(&build_plt(&1, config))
+    Plt.missing_plts()
+    |> Enum.each(fn plt -> build_plt(plt, config) end)
   end
 
   @doc """
@@ -44,6 +45,7 @@ defmodule Dialyzer.Plt.Builder do
     apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
     prev_plt_apps = []
 
+    Plt.Command.new(path)
     build_plt(path, apps, prev_plt_apps)
   end
 
