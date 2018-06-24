@@ -148,3 +148,35 @@ By default, when executed, `mix dialyzer.clean` runs without logging anything,
 and removes only the project level plt and the manifest file.
 
 ![](./img_dialyzer_clean.png "mix dialyzer.clean")
+
+# Warning formatting
+
+Thanks to the **AMAZING** work from Andrew (@asummers) on dialyxir, I've managed to integrate the formatting ability also into mix-dialyzer.
+
+Currently, the integration is still pretty much a porting of his amazing work, with a few modifications:
+
+- Limited the formatting option to 2 types: long and short messages
+- Added a new callback in warnings to retrieve a simple name of a warning (for user context)
+- Improved description and formatting of all warnings
+- Removed explanation function from warnings
+- Added ansi coloring
+- General refactoring across all his modules
+
+The display style of the warnings is inspired by Elm, but further improvements are expected since some messages are not as readable as I whish they were.
+
+--- 
+
+For the user, this feature is automatically enabled, and he can choose between 2 options:
+
+```elixir
+mix dialyzer # automatic fallback to short messages
+```
+![](./img_dialyzer_messages_short.png "short error messages")
+
+```elixir
+mix dialyzer --long
+```
+
+![](./img_dialyzer_messages_long.png "long error messages")
+
+Excluding some warnings is still not possible, but I'm currently working on it to resolve it asap.
