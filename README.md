@@ -1,5 +1,9 @@
 # Dialyzer for Elixir
 
+Do you want to read more about how everything is implemented? Go here then: [docs](doc/README.md)
+
+---
+
 Elixir has matured a lot in the last years! And in the newer versions we are continually seeing an increasing focus on
 project productivity tools, like error diffs, mix xref, exception blame and code formatter.
 
