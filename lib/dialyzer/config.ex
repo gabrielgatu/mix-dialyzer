@@ -57,9 +57,7 @@ defmodule Dialyzer.Config do
         |> read_config_file()
 
       {:error, _} ->
-        info(
-          "Dialyzer: configuration file not found. Creating it right now at .dialyzer.exs"
-        )
+        info("Dialyzer: configuration file not found. Creating it right now at .dialyzer.exs")
 
         content = create_base_config()
         create_config_file(content)

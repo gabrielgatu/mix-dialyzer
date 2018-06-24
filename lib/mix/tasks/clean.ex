@@ -82,7 +82,9 @@ defmodule Mix.Tasks.Dialyzer.Clean do
 
       {:error, reason} ->
         """
-        #{color(:cyan, "* failure")} - error during deletion of #{filepath}: #{color(:yellow, inspect(reason))}
+        #{color(:cyan, "* failure")} - error during deletion of #{filepath}: #{
+          color(:yellow, inspect(reason))
+        }
         """
     end
   end
@@ -104,7 +106,9 @@ defmodule Mix.Tasks.Dialyzer.Clean do
 
       {:error, reason, filepath} ->
         """
-        #{color(:cyan, "* failure")} - error during deletion of #{filepath}: #{color(:yellow, inspect(reason))}
+        #{color(:cyan, "* failure")} - error during deletion of #{filepath}: #{
+          color(:yellow, inspect(reason))
+        }
         """
     end
   end

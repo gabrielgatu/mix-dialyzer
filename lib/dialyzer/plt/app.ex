@@ -15,12 +15,10 @@ defmodule Dialyzer.Plt.App do
   def info(app), do: get_info(app, true)
   def info(app, use_cached_version), do: get_info(app, use_cached_version)
 
-  @spec get_info(atom, boolean) :: t | nil
   defp get_info(app, true) do
     App.Cache.get_or_insert(app)
   end
 
-  @spec get_info(atom, boolean) :: t | nil
   defp get_info(app, false) do
     case can_load_app?(app) do
       false ->
@@ -65,7 +63,6 @@ defmodule Dialyzer.Plt.App.Module do
     %Module{module: mod, filepath: filepath, md5: md5}
   end
 end
-
 
 defmodule Dialyzer.Plt.App.Cache do
   use Agent

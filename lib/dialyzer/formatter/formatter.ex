@@ -26,6 +26,7 @@ defmodule Dialyzer.Formatter do
 
         :long ->
           header = generate_warning_header(warning.name, filepath, line)
+
           message =
             arguments
             |> warning.format_long()

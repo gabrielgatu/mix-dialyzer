@@ -1,5 +1,5 @@
 defmodule Dialyzer.CommandLine.Config do
-  defstruct [msg_type: :short]
+  defstruct msg_type: :short
 
   alias __MODULE__
 
@@ -11,10 +11,11 @@ defmodule Dialyzer.CommandLine.Config do
   def parse(args) do
     {opts, _, _} = OptionParser.parse(args, strict: @command_options)
 
-    msg_type = case Keyword.fetch(opts, :long) do
-      {:ok, true} -> :long
-      :error -> :short
-    end
+    msg_type =
+      case Keyword.fetch(opts, :long) do
+        {:ok, true} -> :long
+        :error -> :short
+      end
 
     %Config{msg_type: msg_type}
   end
