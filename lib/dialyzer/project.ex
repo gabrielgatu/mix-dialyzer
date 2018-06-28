@@ -1,10 +1,17 @@
 defmodule Dialyzer.Project do
   @doc """
-  Get the name of the current application
+  Get the name of the applications defined at the root.
+
+  In case of umbrella projects, this is a list of all
+  the applications defined inside `/apps`.
   """
-  @spec application() :: atom
-  def application do
-    Mix.Project.get().project()[:app]
+  @spec applications() :: [atom]
+  def applications do
+    if Mix.Project.umbrella?() do
+      Mix.Dep.Umbrella.loaded() |> Enum.map(& &1.app)
+    else
+      [Mix.Project.get().project()[:app]]
+    end
   end
 
   @doc """
@@ -20,6 +27,7 @@ defmodule Dialyzer.Project do
     project_deps()
     |> Enum.sort()
     |> Enum.uniq()
+    |> Kernel.--(applications())
   end
 
   @doc """

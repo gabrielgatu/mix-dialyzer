@@ -33,7 +33,7 @@ defmodule Dialyzer.Plt.Builder do
     included_apps = config.apps[:include]
 
     Project.dependencies()
-    |> Kernel.++([Project.application()])
+    |> Kernel.++(Project.applications())
     |> Kernel.++(elixir_apps())
     |> Kernel.++(included_apps)
     |> Kernel.--(removed_apps)

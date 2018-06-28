@@ -1,5 +1,11 @@
 defmodule Dialyzer.Config do
-  defstruct [:init_plt, build_dir: [], warnings: [active: [], ignore: []], apps: [remove: [], include: []], cmd: nil]
+  defstruct [
+    :init_plt,
+    build_dir: [],
+    warnings: [active: [], ignore: []],
+    apps: [remove: [], include: []],
+    cmd: nil
+  ]
 
   import Dialyzer.Logger
   alias Dialyzer.{CommandLine, Project, Plt}
@@ -81,7 +87,7 @@ defmodule Dialyzer.Config do
       build_dir: build_dir,
       warnings: [
         active: active_warnings,
-        ignore: ignored_warnings,
+        ignore: ignored_warnings
       ],
       apps: [
         remove: remove_apps,
@@ -99,12 +105,10 @@ defmodule Dialyzer.Config do
         remove: [],
         include: []
       ],
-
       warnings: [
         ignore: [],
-        active: warnings,
+        active: warnings
       ],
-
       extra_build_dir: []
     ]
   end
@@ -112,7 +116,16 @@ defmodule Dialyzer.Config do
   @spec create_config_file(Keyword.t()) :: none
   defp create_config_file(content) do
     path()
-    |> File.write!(inspect(content, pretty: true, width: 0, limit: :infinity, printable_limit: :infinity, pretty: true))
+    |> File.write!(
+      inspect(
+        content,
+        pretty: true,
+        width: 0,
+        limit: :infinity,
+        printable_limit: :infinity,
+        pretty: true
+      )
+    )
   end
 
   @spec to_erlang_format(Config.t()) :: map

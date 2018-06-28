@@ -76,13 +76,25 @@ defmodule Mix.Tasks.Dialyzer.Info do
   end
 
   defp application_name do
-    color(:cyan, "#{inspect(Dialyzer.Project.application())}")
+    Dialyzer.Project.applications()
+    |> Enum.reduce("", fn app, acc ->
+      acc <>
+        """
+        #{color(:cyan, "* #{app}")}
+        """
+    end)
+    |> String.trim()
   end
 
   defp applications_analyzed(config) do
     erlang_apps = Dialyzer.Plt.Builder.erlang_apps()
     elixir_apps = Dialyzer.Plt.Builder.elixir_apps() -- erlang_apps
-    project_apps = Dialyzer.Plt.Builder.project_apps(config) -- elixir_apps
+
+    project_apps =
+      config
+      |> Dialyzer.Plt.Builder.project_apps()
+      |> Kernel.--(elixir_apps)
+      |> Kernel.--(Dialyzer.Project.applications())
 
     str = format_applications_analyzed_section("Erlang applications", erlang_apps)
     str = str <> format_applications_analyzed_section("Elixir applications", elixir_apps)
