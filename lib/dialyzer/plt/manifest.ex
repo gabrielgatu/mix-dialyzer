@@ -72,6 +72,7 @@ defmodule Dialyzer.Plt.Manifest do
       {app, manifest_app}
     end)
     |> Stream.filter(fn {_app, manifest_app} -> manifest_app == nil end)
+    |> Stream.map(fn {app, _manifest_app} -> app end)
     |> Stream.flat_map(& &1.mods)
     |> Stream.map(& &1.filepath)
     |> Enum.to_list()
