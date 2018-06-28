@@ -1,5 +1,5 @@
 defmodule Dialyzer.Config do
-  defstruct [:init_plt, build_dir: [], warnings: [], apps: [remove: [], include: []], cmd: nil]
+  defstruct [:init_plt, build_dir: [], warnings: [active: [], ignore: []], apps: [remove: [], include: []], cmd: nil]
 
   import Dialyzer.Logger
   alias Dialyzer.{CommandLine, Project, Plt}
@@ -57,7 +57,7 @@ defmodule Dialyzer.Config do
         |> read_config_file()
 
       {:error, _} ->
-        info("Dialyzer: configuration file not found. Creating it right now at .dialyzer.exs")
+        info("Dialyzer: configuration file not found. Creating it right now: .dialyzer.exs")
 
         content = create_base_config()
         create_config_file(content)
@@ -69,17 +69,23 @@ defmodule Dialyzer.Config do
   defp read_config_file(content) do
     init_plt = Plt.Path.project_plt()
     build_dir = content[:extra_build_dir] ++ Project.build_paths()
-    warnings = content[:warnings]
+
+    active_warnings = content[:warnings][:active]
+    ignored_warnings = content[:warnings][:ignore]
+
     remove_apps = content[:apps][:remove]
-    include_apps = content[:apps][:include]
+    included_apps = content[:apps][:include]
 
     %Config{
       init_plt: init_plt,
       build_dir: build_dir,
-      warnings: warnings,
+      warnings: [
+        active: active_warnings,
+        ignore: ignored_warnings,
+      ],
       apps: [
         remove: remove_apps,
-        include: include_apps
+        include: included_apps
       ]
     }
   end
@@ -89,11 +95,16 @@ defmodule Dialyzer.Config do
     warnings = default_warnings()
 
     [
-      warnings: warnings,
       apps: [
         remove: [],
         include: []
       ],
+
+      warnings: [
+        ignore: [],
+        active: warnings,
+      ],
+
       extra_build_dir: []
     ]
   end
@@ -101,7 +112,7 @@ defmodule Dialyzer.Config do
   @spec create_config_file(Keyword.t()) :: none
   defp create_config_file(content) do
     path()
-    |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity, pretty: true))
+    |> File.write!(inspect(content, pretty: true, width: 0, limit: :infinity, printable_limit: :infinity, pretty: true))
   end
 
   @spec to_erlang_format(Config.t()) :: map
@@ -109,7 +120,7 @@ defmodule Dialyzer.Config do
     [
       init_plt: config.init_plt |> String.to_charlist(),
       files_rec: config.build_dir |> Enum.map(&String.to_charlist/1),
-      warnings: config.warnings
+      warnings: config.warnings[:active]
     ]
   end
 end
