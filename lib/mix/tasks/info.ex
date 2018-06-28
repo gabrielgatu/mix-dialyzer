@@ -34,7 +34,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
 
   def run(_args) do
     Mix.Project.compile([])
-    Dialyzer.Application.start(nil, nil)
+    Application.ensure_started(:mix_dialyzer)
 
     config = Dialyzer.Config.load()
 
