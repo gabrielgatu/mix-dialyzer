@@ -125,7 +125,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
   end
 
   defp warnings_analyzed(config) do
-    Enum.reduce(config.warnings, "", fn warning, acc ->
+    Enum.reduce(config.warnings[:active], "", fn warning, acc ->
       acc <>
         """
         #{color(:cyan, "* #{warning}")} - #{@warning_info[warning]}
