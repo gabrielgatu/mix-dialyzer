@@ -119,11 +119,10 @@ defmodule Dialyzer.Config do
     |> File.write!(
       inspect(
         content,
-        pretty: true,
-        width: 0,
         limit: :infinity,
         printable_limit: :infinity,
-        pretty: true
+        pretty: true,
+        width: 0
       )
     )
   end
