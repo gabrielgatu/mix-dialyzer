@@ -166,7 +166,7 @@ The display style of the warnings is inspired by Elm, but further improvements a
 
 --- 
 
-For the user, this feature is automatically enabled, and he can choose between 2 options:
+For the user, this feature is automatically enabled, and he can choose between 2 options (warnings with formatting of version 0.1.0):
 
 ```elixir
 mix dialyzer # automatic fallback to short messages
@@ -179,4 +179,47 @@ mix dialyzer --long
 
 ![](./img_dialyzer_messages_long.png "long error messages")
 
-Excluding some warnings is still not possible, but I'm currently working on it to resolve it asap.
+Finally, from version `0.2.0` we are printing also some stats regarding the warnings emitted:
+
+![](./img_dialyzer_warning_stats.png "warnings stats")
+
+# Ignoring warnings
+
+From version `0.2.0`, it's also possibile to ignore specific warnings.
+Before implementing this, me and @seancribbs evaluated some alternatives, like:
+
+1 - Ignoring warnings based on file and line number, directly specified by the user, like: **/lib/dialyzer/config.ex:48**. 
+
+    - Cons: The problem with this approach is that now we have a constraint about the line number, because if it changes we are not referring anymore to the right warning, and it will be emitted again.
+
+    - Pros: It's very easy to ignore a specific warning, it's just a matter of copy paste the line which generated the error inside `.dialyzer.exs`. Another advantage is that this allows to be specific about the warning, although we could have a line with 2 warnings and it could not be possible to suppress only one of them. (We could make it a tuple with the format of {filename, warning}).
+
+2 - Toggle warnings at function level, by specifying a tuple like **{ModuleName, Function, arity}** or by adding an annotation on top of the function, like **@dialyzer_ignore**.
+
+    - Cons: A lot of them! First of all, poor control over warnings you want to ignore. Also, in case of the second one, leaking dialyzer control into the source code (then, if the user wants to remove dialyzer, it has unnecessary annotations it still needs to remove).
+
+    - Pros: Easy to ignore a warning. Easy to understand from where that warning came. Pretty extensible (for example, a 4 elem tuple to specify also the warning type or the annotatin could take args).
+
+3 - Specify directly the error message as a string, and if it matches, it's going to be ignored.
+
+    - Cons: Very limited extension. Dependant on the error formatting. Generally a bad idea.
+
+    - Pros: Well.... Very easy to ignore a very specific warning.
+
+4 - Tuple with dialyzer warning and file/line, like what dialyxir currently supports: **{":0:unknown_function Function :erl_types.t_is_opaque/1/1 does not exist."}**
+
+    - Cons: Very hard to write and dependant on the dialyzer warning formatting. Difficult for a beginner to write and to read. (The writing part could be made easier by "leaking" the dialyzer warning to the user, but then we cannot take full advantage of the fact that we have formatted warnings).
+
+    - Pros: Very easy to ignore specific warning. Easy to add ignored warnings if we are leaking the dialyzer warning.
+
+5 - Tagged warnings that can be referred by an hash and ignored this way. For example: **[nwhaetf] lib/mod.ex:1 warning...**.
+
+    - Cons: Hard to understand which warnings have been ignored by looking at the `.dialyzer.exs` file. (This could be improved by adding a mix task that shows for each tag which warning has been ignored, and we could also show some more informations, like documentation and so on...) Somehow difficult to make the ignored warnings portable to other enviroments without sharing mappings between hash <> warnings.
+
+    - Pros: Easy to add ignored warnings. Easy to ignore a very specific warning.
+
+In the end, after some discussion, we ended up with the solition number 5. I think it's the best option if we want to be completely indipendent from the dialyzer internals and at the same time offer a great experience for newcomers.
+
+The hashing system is built upon a caching system, which allows us to maintain record of the already emitted warnings and their hash.
+
+![](./img_dialyzer_warning_hash.png "warning hash")
