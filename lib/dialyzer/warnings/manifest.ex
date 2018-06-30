@@ -23,6 +23,12 @@ defmodule Dialyzer.Warnings.Manifest do
     |> File.write!(inspect(warnings, limit: :infinity, printable_limit: :infinity))
   end
 
+  @doc """
+  It returns the path for the manifest file.
+  """
+  @spec path() :: binary
+  def path(), do: Dialyzer.Plt.Path.project_plt() <> ".warnings.manifest"
+
   @spec find_cached_warning([Warning.t()], Warning.t()) :: Warning.t() | nil
   defp find_cached_warning(cached_warnings, warning) do
     Enum.find(cached_warnings, fn cached_warn ->
@@ -37,12 +43,6 @@ defmodule Dialyzer.Warnings.Manifest do
   defp generate_tag do
     for _ <- 0..6, into: "", do: <<Enum.random(?a..?z)>>
   end
-
-  @doc """
-  It returns the path for the manifest file.
-  """
-  @spec path() :: binary
-  def path(), do: Dialyzer.Plt.Path.project_plt() <> ".warnings.manifest"
 
   @spec get_or_create_manifest() :: map
   defp get_or_create_manifest do
