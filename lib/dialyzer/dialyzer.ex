@@ -9,6 +9,6 @@ defmodule Dialyzer do
     |> Config.to_erlang_format()
     |> Kernel.++(check_plt: false)
     |> :dialyzer.run()
-    |> Dialyzer.Formatter.format(config.cmd.msg_type)
+    |> Dialyzer.Warnings.format_and_print(config)
   end
 end

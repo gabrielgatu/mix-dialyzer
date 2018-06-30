@@ -44,6 +44,7 @@ defmodule Mix.Tasks.Dialyzer.Clean do
     deletions = [
       delete_file(Plt.Path.project_plt()),
       delete_file(Plt.Manifest.path()),
+      delete_file(Dialyzer.Warnings.Manifest.path()),
       if(all_active, do: delete_folder(Plt.Path.home_dir()), else: "")
     ]
 

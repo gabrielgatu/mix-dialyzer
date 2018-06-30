@@ -19,6 +19,8 @@ defmodule Dialyzer.MixProject do
   end
 
   defp deps do
-    []
+    [
+      {:scribe, "~> 0.8"}
+    ]
   end
 end
