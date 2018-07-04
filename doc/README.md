@@ -218,8 +218,20 @@ Before implementing this, me and @seancribbs evaluated some alternatives, like:
 
     - Pros: Easy to add ignored warnings. Easy to ignore a very specific warning.
 
-In the end, after some discussion, we ended up with the solition number 5. I think it's the best option if we want to be completely indipendent from the dialyzer internals and at the same time offer a great experience for newcomers.
+In the end, after some discussion (with the contribution of @asummers, thank you!), we ended up with the solition number 4 (initial adopted solution was nr. 5, but quickly we realized it had some deep flaws).
 
-The hashing system is built upon a caching system, which allows us to maintain record of the already emitted warnings and their hash.
+To ignore a specific warning, a tuple with this format is required:
 
-![](./img_dialyzer_warning_hash.png "warning hash")
+```elixir
+{filepath, line, warning}
+```
+
+If the developer wants to ignore more than one warning, based on the same pattern, a wildcard is available: `:*`
+
+```elixir
+{filepath, :*, :*} # Ignore all warnings from this file
+```
+
+Finally, when analyzing with the option `--long`, a tuple to ignore the warning will be printed for each emitted warning.
+
+All this work is still in refinement process, for example we still need to support warnings that have not a file and a line number!
