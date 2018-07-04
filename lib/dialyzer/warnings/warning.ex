@@ -1,11 +1,11 @@
 defmodule Dialyzer.Warning do
-  defstruct [:name, :file, :line, :message, :tag]
+  defstruct [:type, :file, :line, :name, :args]
   alias __MODULE__
 
   @type t :: %__MODULE__{}
 
-  @spec new({atom, {binary, integer}, binary}) :: t
-  def new({name, {file, line}, message}) do
-    %Warning{name: name, file: file, line: line, message: message}
+  @spec new({atom, {binary, integer}, {atom, list}}) :: t
+  def new({type, {file, line}, {name, args}}) do
+    %Warning{type: type, file: to_string(file), line: line, name: name, args: args}
   end
 end

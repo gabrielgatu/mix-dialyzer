@@ -11,35 +11,44 @@ defmodule Dialyzer.Formatter do
   end
 
   defp format_warning(warning, type) do
-    {warning_name, arguments} = warning.message
-    filepath = Path.relative_to_cwd(warning.file)
-    line = warning.line
-    tag = warning.tag
+    relative_filepath = Path.relative_to_cwd(warning.file)
 
     try do
-      warning = fetch_warning(warning_name)
+      warning_formatter = fetch_warning(warning.name)
 
       case type do
         :short ->
-          header = "#{filepath}:#{line}"
-          message = warning.format_short(arguments)
+          header = "#{relative_filepath}:#{warning.line}"
+          message = warning_formatter.format_short(warning.args)
 
-          "[#{color(:yellow, tag)}] #{color(:cyan, header)} - #{message}"
+          "#{color(:cyan, header)} - #{message}"
 
         :long ->
-          header = generate_warning_header(warning.name, filepath, line, tag)
+          header = generate_warning_header(warning_formatter.name(), relative_filepath, warning.line)
+
+          ignore_warning_tuple = (fn ->
+            file = if warning.file == "", do: :*, else: warning.file
+            line = if warning.line == 0, do: :*, else: warning.line
+
+            {file, line, warning.name}
+          end).()
 
           message =
-            arguments
-            |> warning.format_long()
+            warning.args
+            |> warning_formatter.format_long()
             |> String.split("\n")
             |> Enum.map(&("    " <> &1))
             |> Enum.join("\n")
+            |> String.trim()
 
           """
           #{color(:cyan, header)}
 
           #{message}
+
+          Ignore warning: #{
+            inspect(ignore_warning_tuple, limit: :infinity, printable_limit: :infinity)
+          }
           """
       end
     rescue
@@ -74,20 +83,14 @@ defmodule Dialyzer.Formatter do
     end
   end
 
-  defp generate_warning_header(warning_name, filepath, line_nr, tag) do
-    warning_fragment = " #{String.upcase(warning_name)} "
-    filepath_fragment = " #{filepath}:#{line_nr}"
-    tag_fragment = " [#{color(:yellow, tag)}] "
+  defp generate_warning_header(warning_name, filepath, line_nr) do
+    warning_fragment = if warning_name != "", do: " #{String.upcase(warning_name)} ", else: ""
+    filepath_fragment = if line_nr != 0, do: " #{filepath}:#{line_nr}", else: ""
 
-    len =
-      80 -
-        (String.length(warning_fragment) + String.length(filepath_fragment) +
-           String.length(tag_fragment))
-
+    len = 80 - (String.length(warning_fragment) + String.length(filepath_fragment))
     separators = for _ <- 0..len, into: "", do: "-"
 
     String.slice(separators, 0..1)
-    |> Kernel.<>(tag_fragment)
     |> Kernel.<>(warning_fragment)
     |> Kernel.<>(String.slice(separators, 2..-1))
     |> Kernel.<>(filepath_fragment)
