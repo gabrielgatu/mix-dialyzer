@@ -101,10 +101,10 @@ defmodule Dialyzer.Warnings do
     warning atom from the active warnings in #{color(:cyan, "`.dialyzer.exs`")}
 
     To ignore a specific warning, add a tuple with the format
-    #{color(:cyan, "{filepath, line, error}")} to the ignored warnings in #{color(:cyan, "`.dialyzer.exs`")}.
+    #{color(:cyan, "{filepath, line, warning}")} to the ignored warnings in #{color(:cyan, "`.dialyzer.exs`")}.
 
     To match more than one warning, use a placeholder (#{color(:cyan, ":*")}) instead of a specific value:
-    #{color(:cyan, "{filepath, :*, error}")}
+    #{color(:cyan, "{filepath, :*, warning}")}
 
     When printing with the *long* format, the tuple to ignore a specific warning will be
     automatically printed for each warning!
