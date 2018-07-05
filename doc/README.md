@@ -235,3 +235,13 @@ If the developer wants to ignore more than one warning, based on the same patter
 Finally, when analyzing with the option `--long`, a tuple to ignore the warning will be printed for each emitted warning.
 
 All this work is still in refinement process, for example we still need to support warnings that have not a file and a line number!
+
+
+# Unmatched warnings
+
+If the user has some warnings inside `.dialyzer.exs` that are not valid (ie: they are not matching any emitted warning), dialyzer will alert the user about them when running it, and also it will check if there are some warnings that are very similar, based on one of this 2 conditions:
+
+- They refer to the same file and warning
+- They refer to the same file and the warning is mispelled but similar to one emitted (using String.jaro_distance to check).
+
+![](./img_dialyzer_warning_unmatched.png "unmatched warnings")
