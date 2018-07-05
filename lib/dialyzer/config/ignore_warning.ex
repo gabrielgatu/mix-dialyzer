@@ -16,6 +16,7 @@ defmodule Dialyzer.Config.IgnoreWarning do
     |> Map.get(field)
     |> case do
       nil -> default
+      :* -> default
       val -> val
     end
   end

@@ -72,7 +72,7 @@ defmodule Dialyzer.Warnings do
     if Enum.count(warnings_without_mapping) > 0 do
       message =
         Enum.reduce(warnings_without_mapping, "", fn warning, acc ->
-          header = "- #{color(:cyan, inspect(IgnoreWarning.to_ignore_format(warning)))}"
+          header = "\n\n- #{color(:yellow, inspect(IgnoreWarning.to_ignore_format(warning)))}"
 
           emitted_warnings
           |> IgnoreWarning.find_suggestions_for_unmatched_warns(warning)
@@ -84,13 +84,13 @@ defmodule Dialyzer.Warnings do
               formatted_matches = Enum.reduce(matches, "", fn match, acc ->
                 ignore_warning_tuple = Warning.to_ignore_format(match)
                 acc <>
-                  "    #{
+                  "\n    #{
                     color(:cyan, inspect(ignore_warning_tuple, limit: :infinity, printable_limit: :infinity))
                   }"
               end)
 
               header
-              |> Kernel.<>("\n\n    From the warnings emitted I have found these warnings that could have been the ones you were trying to ignore:\n\n")
+              |> Kernel.<>("\n\n    From the warnings emitted I have found these warnings that could have been the ones you were trying to ignore:\n")
               |> Kernel.<>(formatted_matches)
               |> Kernel.<>(acc)
           end
@@ -102,7 +102,7 @@ defmodule Dialyzer.Warnings do
         color(:cyan, "`.dialyzer.exs`")
       }:
 
-      #{message}
+      #{message |> String.trim()}
       """
       |> IO.puts()
     end
