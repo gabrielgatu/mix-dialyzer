@@ -1,23 +1,24 @@
 defmodule Dialyzer.Warnings do
-  alias Dialyzer.{Warning}
+  alias Dialyzer.{Warning, Config.IgnoreWarning}
   import Dialyzer.Logger, only: [color: 2]
-
-  @type ignored_warning :: {String.t(), integer, atom}
-  @type warning_mapping :: {ignored_warning, [Warning.t()]}
 
   @spec format_and_print(list(), Dialyzer.Config.t()) :: none
   def format_and_print(warnings, config) do
     warnings = Enum.map(warnings, &Warning.new/1)
-    warning_mappings = find_warning_mappings(warnings, config)
 
-    warnings_to_emit = filter_warnings_to_emit(warnings, warning_mappings)
-    warnings_without_mapping = filter_warnings_without_mapping(warning_mappings)
+    ignored_tuples = Enum.map(config.warnings[:ignore], &IgnoreWarning.new/1)
+
+    warning_mappings =
+      IgnoreWarning.associate_with_emitted_warnings(ignored_tuples, warnings)
+
+    warnings_to_emit = IgnoreWarning.Mapping.filter_warnings_to_emit(warnings, warning_mappings)
+    warnings_without_mapping = IgnoreWarning.Mapping.filter_unmatched_warnings(warning_mappings)
 
     print_header_stats(warnings, warnings_to_emit)
     print_stats(warnings, warnings_to_emit)
     print_footer()
     print_warnings(warnings_to_emit, config.cmd.msg_type)
-    print_warnings_without_mapping(warnings_without_mapping)
+    print_warnings_without_mapping(warnings_to_emit, warnings_without_mapping)
   end
 
   @spec print_header_stats([Warning.t()], [Warning.t()]) :: none
@@ -66,19 +67,44 @@ defmodule Dialyzer.Warnings do
     end)
   end
 
-  @spec print_warnings_without_mapping([{String.t(), integer, atom}]) :: none
-  defp print_warnings_without_mapping(warnings) do
-    if Enum.count(warnings) > 0 do
-      warnings = Enum.reduce(warnings, "", fn warning, acc ->
-        acc <> "- #{color(:cyan, inspect(warning))}"
-      end)
+  @spec print_warnings_without_mapping([Warning.t()], [IgnoreWarning.t()]) :: none
+  defp print_warnings_without_mapping(emitted_warnings, warnings_without_mapping) do
+    if Enum.count(warnings_without_mapping) > 0 do
+      message =
+        Enum.reduce(warnings_without_mapping, "", fn warning, acc ->
+          header = "- #{color(:cyan, inspect(IgnoreWarning.to_ignore_format(warning)))}"
+
+          emitted_warnings
+          |> IgnoreWarning.find_suggestions_for_unmatched_warns(warning)
+          |> case do
+            [] ->
+              header
+
+            matches ->
+              formatted_matches = Enum.reduce(matches, "", fn match, acc ->
+                ignore_warning_tuple = Warning.to_ignore_format(match)
+                acc <>
+                  "    #{
+                    color(:cyan, inspect(ignore_warning_tuple, limit: :infinity, printable_limit: :infinity))
+                  }"
+              end)
+
+              header
+              |> Kernel.<>("\n\n    From the warnings emitted I have found these warnings that could have been the ones you were trying to ignore:\n\n")
+              |> Kernel.<>(formatted_matches)
+              |> Kernel.<>(acc)
+          end
+        end)
 
       """
 
-      No match has been found for these ignored warnings you specified in #{color(:cyan, "`.dialyzer.exs`")}:
+      No match has been found for these ignored warnings you specified in #{
+        color(:cyan, "`.dialyzer.exs`")
+      }:
 
-      #{warnings}
-      """ |> IO.puts()
+      #{message}
+      """
+      |> IO.puts()
     end
   end
 
@@ -96,7 +122,9 @@ defmodule Dialyzer.Warnings do
     warning atom from the active warnings in #{color(:cyan, "`.dialyzer.exs`")}
 
     To ignore a specific warning, add a tuple with the format
-    #{color(:cyan, "{filepath, line, warning}")} to the ignored warnings in #{color(:cyan, "`.dialyzer.exs`")}.
+    #{color(:cyan, "{filepath, line, warning}")} to the ignored warnings in #{
+      color(:cyan, "`.dialyzer.exs`")
+    }.
 
     To match more than one warning, use a placeholder (#{color(:cyan, ":*")}) instead of a specific value:
     #{color(:cyan, "{filepath, :*, warning}")}
@@ -105,53 +133,5 @@ defmodule Dialyzer.Warnings do
     automatically printed for each warning!
     """
     |> IO.puts()
-  end
-
-  @spec find_warning_mappings([Warning.t()], Dialyzer.Config.t()) :: [{tuple, Warning.t()}]
-  defp find_warning_mappings(warnings, config) do
-    extract_with_defaults = fn coll, index, default ->
-      case Enum.at(coll, index) do
-        nil -> default
-        :* -> default
-        val -> val
-      end
-    end
-
-    Enum.map(config.warnings[:ignore], fn ignored_warning ->
-      res = Enum.filter(warnings, fn warning ->
-        ignored_warning = Tuple.to_list(ignored_warning)
-
-        ignored_file = extract_with_defaults.(ignored_warning, 0, warning.file)
-        ignored_line = extract_with_defaults.(ignored_warning, 1, warning.line)
-        ignored_warn = extract_with_defaults.(ignored_warning, 2, warning.name)
-
-        cond do
-          warning.file != ignored_file -> false
-          warning.line != ignored_line -> false
-          warning.name != ignored_warn -> false
-          true -> true
-        end
-      end)
-
-      {ignored_warning, res}
-    end)
-  end
-
-  @spec filter_warnings_to_emit([Warning.t()], [warning_mapping]) :: [Warning.t()]
-  defp filter_warnings_to_emit(warnings, warnings_to_ignore) do
-    Enum.filter(warnings, fn warning ->
-      not Enum.any?(warnings_to_ignore, fn {_, warns} ->
-        warning in warns
-      end)
-    end)
-  end
-
-  @spec filter_warnings_without_mapping([warning_mapping]) :: [warning_mapping]
-  defp filter_warnings_without_mapping(warnings_to_ignore) do
-    warnings_to_ignore
-    |> Enum.filter(fn {_ignored_warn, found_warns} ->
-      found_warns == []
-    end)
-    |> Enum.map(fn {ignored_warn, _found_warns} -> ignored_warn end)
   end
 end
