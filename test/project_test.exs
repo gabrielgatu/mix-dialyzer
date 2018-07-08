@@ -13,7 +13,7 @@ defmodule Dialyzer.ProjectTest do
       app = String.to_atom(name)
 
       Mix.Project.in_project(app, path, fn _ ->
-        assert Project.application() == app
+        assert Project.applications() == [app]
       end)
     end
 

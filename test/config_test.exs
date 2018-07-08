@@ -52,7 +52,7 @@ defmodule Dialyzer.ConfigTest do
         config = Config.load()
         assert config.apps == [remove: [], include: []]
         assert config.init_plt == Plt.Path.project_plt()
-        assert config.warnings == Config.default_warnings()
+        assert config.warnings[:active] == Config.default_warnings()
       end)
     end
   end

@@ -5,7 +5,7 @@ defmodule Dialyzer.Plt.ManifestTest do
   alias Dialyzer.Plt.{Manifest}
 
   setup_all do
-    Application.ensure_started(:mix_dialyzer)
+    Application.ensure_all_started(:mix_dialyzer)
     {name, path} = create_temporary_project()
     %{name: name, path: path}
   end
@@ -51,7 +51,7 @@ defmodule Dialyzer.Plt.ManifestTest do
       end)
     end
 
-    test "it detects correctly the changes", %{name: name, path: path} do
+    test "it detects correctly if the apps changes", %{name: name, path: path} do
       app = String.to_atom(name)
 
       Mix.Project.in_project(app, path, fn _ ->
@@ -59,9 +59,7 @@ defmodule Dialyzer.Plt.ManifestTest do
         Manifest.update()
 
         config = %Config{config | apps: [remove: [:kernel], include: []]}
-
-        assert Manifest.changes(config)[:apps][:removed] |> Enum.at(0) |> Map.fetch!(:app) ==
-                 :kernel
+        assert Manifest.changes(config)[:files][:removed] |> Enum.count() > 0
       end)
     end
   end
