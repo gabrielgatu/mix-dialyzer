@@ -6,6 +6,7 @@ defmodule Dialyzer.Warning do
 
   @spec new({atom, {binary, integer}, {atom, list}}) :: t
   def new({type, {file, line}, {name, args}}) do
+    file = if file != '', do: file, else: :code.which(elem(args, 0))
     %Warning{type: type, file: to_string(file), line: line, name: name, args: args}
   end
 

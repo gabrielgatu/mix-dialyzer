@@ -35,8 +35,10 @@ defmodule Dialyzer.Plt.Builder do
     Project.dependencies()
     |> Kernel.++(Project.applications())
     |> Kernel.++(elixir_apps())
+    |> Enum.uniq()
     |> Kernel.++(included_apps)
     |> Kernel.--(removed_apps)
+    |> Enum.uniq()
   end
 
   @spec build_plt(atom, Config.t()) :: none

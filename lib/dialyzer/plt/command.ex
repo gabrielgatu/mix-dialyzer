@@ -26,11 +26,13 @@ defmodule Dialyzer.Plt.Command do
   """
   @spec add(binary, [binary]) :: none
   def add(plt_path, files) do
+    if Enum.count(files) > 0 do
     info("Adding modules to #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
     files = Enum.map(files, &to_charlist/1)
-    run(analysis_type: :plt_add, init_plt: plt_path, files: files)
+      run(analysis_type: :plt_add, init_plt: plt_path, output_plt: plt_path, files: files)
+  end
   end
 
   @doc """
@@ -38,11 +40,13 @@ defmodule Dialyzer.Plt.Command do
   """
   @spec remove(binary, [binary]) :: none
   def remove(plt_path, files) do
+    if Enum.count(files) > 0 do
     info("Removing modules from #{Path.basename(plt_path)}")
 
     plt_path = to_charlist(plt_path)
     files = Enum.map(files, &to_charlist/1)
-    run(analysis_type: :plt_remove, init_plt: plt_path, files: files)
+      run(analysis_type: :plt_remove, init_plt: plt_path, output_plt: plt_path, files: files)
+    end
   end
 
   @doc """
