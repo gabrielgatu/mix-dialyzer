@@ -19,6 +19,10 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 dialyzer-*.tar
 
+# Ignore generated files by erlang lexer and parser
+/src/dialyzer_lexer.erl
+/src/dialyzer_parser.erl
+
 # Ignore project level files
 /.elixir_ls
 /.vscode

@@ -1,5 +1,10 @@
+# Credits: this code was originally part of the `dialyxir` project
+# Copyright by Andrew Summers
+# https://github.com/jeremyjh/dialyxir
+
 defmodule Dialyzer.Formatter.WarningHelpers do
   @spec ordinal(non_neg_integer) :: String.t()
+
   def ordinal(1), do: "1st"
   def ordinal(2), do: "2nd"
   def ordinal(3), do: "3rd"

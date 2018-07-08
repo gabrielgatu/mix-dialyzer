@@ -1,3 +1,7 @@
+# Credits: this code was originally part of the `dialyxir` project
+# Copyright by Andrew Summers
+# https://github.com/jeremyjh/dialyxir
+
 defmodule Dialyzer.Formatter.Warning do
   @moduledoc """
   Behaviour for defining warning semantings.

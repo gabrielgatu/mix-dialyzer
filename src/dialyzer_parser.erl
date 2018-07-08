@@ -1,6 +1,6 @@
 -module(dialyzer_parser).
 -export([parse/1, parse_and_scan/1, format_error/1]).
--file("src/dialyzer_parser.yrl", 142).
+-file("src/dialyzer_parser.yrl", 146).
 
 unwrap({_,_,V}) -> V.
 
@@ -2286,7 +2286,7 @@ yeccgoto_values(2=_S, Cat, Ss, Stack, T, Ts, Tzr) ->
  yeccpars2_139(_S, Cat, Ss, Stack, T, Ts, Tzr).
 
 -compile({inline,yeccpars2_2_/1}).
--file("src/dialyzer_parser.yrl", 45).
+-file("src/dialyzer_parser.yrl", 49).
 yeccpars2_2_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2294,7 +2294,7 @@ yeccpars2_2_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_5_/1}).
--file("src/dialyzer_parser.yrl", 110).
+-file("src/dialyzer_parser.yrl", 114).
 yeccpars2_5_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2302,7 +2302,7 @@ yeccpars2_5_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_18_/1}).
--file("src/dialyzer_parser.yrl", 49).
+-file("src/dialyzer_parser.yrl", 53).
 yeccpars2_18_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2310,7 +2310,7 @@ yeccpars2_18_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_23_/1}).
--file("src/dialyzer_parser.yrl", 103).
+-file("src/dialyzer_parser.yrl", 107).
 yeccpars2_23_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2318,7 +2318,7 @@ yeccpars2_23_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_27_/1}).
--file("src/dialyzer_parser.yrl", 115).
+-file("src/dialyzer_parser.yrl", 119).
 yeccpars2_27_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2326,7 +2326,7 @@ yeccpars2_27_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_28_/1}).
--file("src/dialyzer_parser.yrl", 109).
+-file("src/dialyzer_parser.yrl", 113).
 yeccpars2_28_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2334,7 +2334,7 @@ yeccpars2_28_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_29_/1}).
--file("src/dialyzer_parser.yrl", 114).
+-file("src/dialyzer_parser.yrl", 118).
 yeccpars2_29_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2342,7 +2342,7 @@ yeccpars2_29_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_31_/1}).
--file("src/dialyzer_parser.yrl", 106).
+-file("src/dialyzer_parser.yrl", 110).
 yeccpars2_31_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2350,7 +2350,7 @@ yeccpars2_31_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_34_/1}).
--file("src/dialyzer_parser.yrl", 135).
+-file("src/dialyzer_parser.yrl", 139).
 yeccpars2_34_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2358,7 +2358,7 @@ yeccpars2_34_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_38_/1}).
--file("src/dialyzer_parser.yrl", 81).
+-file("src/dialyzer_parser.yrl", 85).
 yeccpars2_38_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2366,7 +2366,7 @@ yeccpars2_38_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_39_/1}).
--file("src/dialyzer_parser.yrl", 94).
+-file("src/dialyzer_parser.yrl", 98).
 yeccpars2_39_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2374,7 +2374,7 @@ yeccpars2_39_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_40_/1}).
--file("src/dialyzer_parser.yrl", 136).
+-file("src/dialyzer_parser.yrl", 140).
 yeccpars2_40_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2382,7 +2382,7 @@ yeccpars2_40_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_41_/1}).
--file("src/dialyzer_parser.yrl", 68).
+-file("src/dialyzer_parser.yrl", 72).
 yeccpars2_41_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2390,7 +2390,7 @@ yeccpars2_41_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_43_/1}).
--file("src/dialyzer_parser.yrl", 100).
+-file("src/dialyzer_parser.yrl", 104).
 yeccpars2_43_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2398,7 +2398,7 @@ yeccpars2_43_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_46_/1}).
--file("src/dialyzer_parser.yrl", 88).
+-file("src/dialyzer_parser.yrl", 92).
 yeccpars2_46_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2406,7 +2406,7 @@ yeccpars2_46_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_47_/1}).
--file("src/dialyzer_parser.yrl", 89).
+-file("src/dialyzer_parser.yrl", 93).
 yeccpars2_47_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2414,7 +2414,7 @@ yeccpars2_47_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_49_/1}).
--file("src/dialyzer_parser.yrl", 98).
+-file("src/dialyzer_parser.yrl", 102).
 yeccpars2_49_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2422,7 +2422,7 @@ yeccpars2_49_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_51_/1}).
--file("src/dialyzer_parser.yrl", 75).
+-file("src/dialyzer_parser.yrl", 79).
 yeccpars2_51_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2430,7 +2430,7 @@ yeccpars2_51_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_52_/1}).
--file("src/dialyzer_parser.yrl", 76).
+-file("src/dialyzer_parser.yrl", 80).
 yeccpars2_52_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2438,7 +2438,7 @@ yeccpars2_52_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_53_/1}).
--file("src/dialyzer_parser.yrl", 129).
+-file("src/dialyzer_parser.yrl", 133).
 yeccpars2_53_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2446,7 +2446,7 @@ yeccpars2_53_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_57_/1}).
--file("src/dialyzer_parser.yrl", 91).
+-file("src/dialyzer_parser.yrl", 95).
 yeccpars2_57_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2454,7 +2454,7 @@ yeccpars2_57_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_58_/1}).
--file("src/dialyzer_parser.yrl", 115).
+-file("src/dialyzer_parser.yrl", 119).
 yeccpars2_58_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2462,7 +2462,7 @@ yeccpars2_58_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_60_/1}).
--file("src/dialyzer_parser.yrl", 92).
+-file("src/dialyzer_parser.yrl", 96).
 yeccpars2_60_(__Stack0) ->
  [__5,__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2470,7 +2470,7 @@ yeccpars2_60_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_61_/1}).
--file("src/dialyzer_parser.yrl", 64).
+-file("src/dialyzer_parser.yrl", 68).
 yeccpars2_61_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2478,7 +2478,7 @@ yeccpars2_61_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_63_/1}).
--file("src/dialyzer_parser.yrl", 130).
+-file("src/dialyzer_parser.yrl", 134).
 yeccpars2_63_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2486,7 +2486,7 @@ yeccpars2_63_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_65_/1}).
--file("src/dialyzer_parser.yrl", 66).
+-file("src/dialyzer_parser.yrl", 70).
 yeccpars2_65_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2494,7 +2494,7 @@ yeccpars2_65_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_67_/1}).
--file("src/dialyzer_parser.yrl", 73).
+-file("src/dialyzer_parser.yrl", 77).
 yeccpars2_67_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2502,7 +2502,7 @@ yeccpars2_67_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_68_/1}).
--file("src/dialyzer_parser.yrl", 74).
+-file("src/dialyzer_parser.yrl", 78).
 yeccpars2_68_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2510,7 +2510,7 @@ yeccpars2_68_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_72_/1}).
--file("src/dialyzer_parser.yrl", 49).
+-file("src/dialyzer_parser.yrl", 53).
 yeccpars2_72_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2518,7 +2518,7 @@ yeccpars2_72_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_73_/1}).
--file("src/dialyzer_parser.yrl", 106).
+-file("src/dialyzer_parser.yrl", 110).
 yeccpars2_73_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2526,7 +2526,7 @@ yeccpars2_73_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_74_/1}).
--file("src/dialyzer_parser.yrl", 105).
+-file("src/dialyzer_parser.yrl", 109).
 yeccpars2_74_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2534,7 +2534,7 @@ yeccpars2_74_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_75_/1}).
--file("src/dialyzer_parser.yrl", 124).
+-file("src/dialyzer_parser.yrl", 128).
 yeccpars2_75_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2542,7 +2542,7 @@ yeccpars2_75_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_76_/1}).
--file("src/dialyzer_parser.yrl", 112).
+-file("src/dialyzer_parser.yrl", 116).
 yeccpars2_76_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2550,7 +2550,7 @@ yeccpars2_76_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_77_/1}).
--file("src/dialyzer_parser.yrl", 108).
+-file("src/dialyzer_parser.yrl", 112).
 yeccpars2_77_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2558,7 +2558,7 @@ yeccpars2_77_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_80_/1}).
--file("src/dialyzer_parser.yrl", 123).
+-file("src/dialyzer_parser.yrl", 127).
 yeccpars2_80_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2566,7 +2566,7 @@ yeccpars2_80_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_81_/1}).
--file("src/dialyzer_parser.yrl", 122).
+-file("src/dialyzer_parser.yrl", 126).
 yeccpars2_81_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2574,7 +2574,7 @@ yeccpars2_81_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_82_/1}).
--file("src/dialyzer_parser.yrl", 121).
+-file("src/dialyzer_parser.yrl", 125).
 yeccpars2_82_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2582,7 +2582,7 @@ yeccpars2_82_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_83_/1}).
--file("src/dialyzer_parser.yrl", 120).
+-file("src/dialyzer_parser.yrl", 124).
 yeccpars2_83_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2590,7 +2590,7 @@ yeccpars2_83_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_84_/1}).
--file("src/dialyzer_parser.yrl", 119).
+-file("src/dialyzer_parser.yrl", 123).
 yeccpars2_84_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2598,7 +2598,7 @@ yeccpars2_84_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_85_/1}).
--file("src/dialyzer_parser.yrl", 118).
+-file("src/dialyzer_parser.yrl", 122).
 yeccpars2_85_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2606,7 +2606,7 @@ yeccpars2_85_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_89_/1}).
--file("src/dialyzer_parser.yrl", 106).
+-file("src/dialyzer_parser.yrl", 110).
 yeccpars2_89_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2614,7 +2614,7 @@ yeccpars2_89_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_96_/1}).
--file("src/dialyzer_parser.yrl", 132).
+-file("src/dialyzer_parser.yrl", 136).
 yeccpars2_96_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2622,7 +2622,7 @@ yeccpars2_96_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_97_/1}).
--file("src/dialyzer_parser.yrl", 78).
+-file("src/dialyzer_parser.yrl", 82).
 yeccpars2_97_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2630,7 +2630,7 @@ yeccpars2_97_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_99_/1}).
--file("src/dialyzer_parser.yrl", 133).
+-file("src/dialyzer_parser.yrl", 137).
 yeccpars2_99_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2638,7 +2638,7 @@ yeccpars2_99_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_100_/1}).
--file("src/dialyzer_parser.yrl", 79).
+-file("src/dialyzer_parser.yrl", 83).
 yeccpars2_100_(__Stack0) ->
  [__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2646,7 +2646,7 @@ yeccpars2_100_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_103_/1}).
--file("src/dialyzer_parser.yrl", 86).
+-file("src/dialyzer_parser.yrl", 90).
 yeccpars2_103_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2654,7 +2654,7 @@ yeccpars2_103_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_104_/1}).
--file("src/dialyzer_parser.yrl", 85).
+-file("src/dialyzer_parser.yrl", 89).
 yeccpars2_104_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2662,7 +2662,7 @@ yeccpars2_104_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_105_/1}).
--file("src/dialyzer_parser.yrl", 117).
+-file("src/dialyzer_parser.yrl", 121).
 yeccpars2_105_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2670,7 +2670,7 @@ yeccpars2_105_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_106_/1}).
--file("src/dialyzer_parser.yrl", 83).
+-file("src/dialyzer_parser.yrl", 87).
 yeccpars2_106_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2678,7 +2678,7 @@ yeccpars2_106_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_108_/1}).
--file("src/dialyzer_parser.yrl", 82).
+-file("src/dialyzer_parser.yrl", 86).
 yeccpars2_108_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2686,7 +2686,7 @@ yeccpars2_108_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_109_/1}).
--file("src/dialyzer_parser.yrl", 101).
+-file("src/dialyzer_parser.yrl", 105).
 yeccpars2_109_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2694,7 +2694,7 @@ yeccpars2_109_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_112_/1}).
--file("src/dialyzer_parser.yrl", 126).
+-file("src/dialyzer_parser.yrl", 130).
 yeccpars2_112_(__Stack0) ->
  [__1 | __Stack] = __Stack0,
  [begin
@@ -2702,7 +2702,7 @@ yeccpars2_112_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_114_/1}).
--file("src/dialyzer_parser.yrl", 78).
+-file("src/dialyzer_parser.yrl", 82).
 yeccpars2_114_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2710,7 +2710,7 @@ yeccpars2_114_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_115_/1}).
--file("src/dialyzer_parser.yrl", 70).
+-file("src/dialyzer_parser.yrl", 74).
 yeccpars2_115_(__Stack0) ->
  [__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2718,7 +2718,7 @@ yeccpars2_115_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_131_/1}).
--file("src/dialyzer_parser.yrl", 96).
+-file("src/dialyzer_parser.yrl", 100).
 yeccpars2_131_(__Stack0) ->
  [__17,__16,__15,__14,__13,__12,__11,__10,__9,__8,__7,__6,__5,__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2726,7 +2726,7 @@ yeccpars2_131_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_133_/1}).
--file("src/dialyzer_parser.yrl", 127).
+-file("src/dialyzer_parser.yrl", 131).
 yeccpars2_133_(__Stack0) ->
  [__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2734,7 +2734,7 @@ yeccpars2_133_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_136_/1}).
--file("src/dialyzer_parser.yrl", 71).
+-file("src/dialyzer_parser.yrl", 75).
 yeccpars2_136_(__Stack0) ->
  [__5,__4,__3,__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2742,7 +2742,7 @@ yeccpars2_136_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_137_/1}).
--file("src/dialyzer_parser.yrl", 111).
+-file("src/dialyzer_parser.yrl", 115).
 yeccpars2_137_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2750,7 +2750,7 @@ yeccpars2_137_(__Stack0) ->
   end | __Stack].
 
 -compile({inline,yeccpars2_139_/1}).
--file("src/dialyzer_parser.yrl", 46).
+-file("src/dialyzer_parser.yrl", 50).
 yeccpars2_139_(__Stack0) ->
  [__2,__1 | __Stack] = __Stack0,
  [begin
@@ -2758,4 +2758,4 @@ yeccpars2_139_(__Stack0) ->
   end | __Stack].
 
 
--file("src/dialyzer_parser.yrl", 145).
+-file("src/dialyzer_parser.yrl", 149).

@@ -12,7 +12,7 @@
 -export([format_error/1]).
 
 %% User code. This is placed here to allow extra attributes.
--file("src/dialyzer_lexer.xrl", 45).
+-file("src/dialyzer_lexer.xrl", 49).
 
 -file("/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/parsetools-2.1.6/include/leexinc.hrl", 14).
 
@@ -605,157 +605,157 @@ yyaction(30, TokenLen, YYtcs, TokenLine) ->
 yyaction(_, _, _, _) -> error.
 
 -compile({inline,yyaction_0/0}).
--file("src/dialyzer_lexer.xrl", 10).
+-file("src/dialyzer_lexer.xrl", 14).
 yyaction_0() ->
      skip_token .
 
 -compile({inline,yyaction_1/0}).
--file("src/dialyzer_lexer.xrl", 11).
+-file("src/dialyzer_lexer.xrl", 15).
 yyaction_1() ->
      skip_token .
 
 -compile({inline,yyaction_2/1}).
--file("src/dialyzer_lexer.xrl", 13).
+-file("src/dialyzer_lexer.xrl", 17).
 yyaction_2(TokenLine) ->
      { token, { '...', TokenLine } } .
 
 -compile({inline,yyaction_3/1}).
--file("src/dialyzer_lexer.xrl", 14).
+-file("src/dialyzer_lexer.xrl", 18).
 yyaction_3(TokenLine) ->
      { token, { 'fun(', TokenLine } } .
 
 -compile({inline,yyaction_4/1}).
--file("src/dialyzer_lexer.xrl", 15).
+-file("src/dialyzer_lexer.xrl", 19).
 yyaction_4(TokenLine) ->
      { token, { '*', TokenLine } } .
 
 -compile({inline,yyaction_5/1}).
--file("src/dialyzer_lexer.xrl", 16).
+-file("src/dialyzer_lexer.xrl", 20).
 yyaction_5(TokenLine) ->
      { token, { '[', TokenLine } } .
 
 -compile({inline,yyaction_6/1}).
--file("src/dialyzer_lexer.xrl", 17).
+-file("src/dialyzer_lexer.xrl", 21).
 yyaction_6(TokenLine) ->
      { token, { ']', TokenLine } } .
 
 -compile({inline,yyaction_7/1}).
--file("src/dialyzer_lexer.xrl", 18).
+-file("src/dialyzer_lexer.xrl", 22).
 yyaction_7(TokenLine) ->
      { token, { '(', TokenLine } } .
 
 -compile({inline,yyaction_8/1}).
--file("src/dialyzer_lexer.xrl", 19).
+-file("src/dialyzer_lexer.xrl", 23).
 yyaction_8(TokenLine) ->
      { token, { ')', TokenLine } } .
 
 -compile({inline,yyaction_9/1}).
--file("src/dialyzer_lexer.xrl", 20).
+-file("src/dialyzer_lexer.xrl", 24).
 yyaction_9(TokenLine) ->
      { token, { '{', TokenLine } } .
 
 -compile({inline,yyaction_10/1}).
--file("src/dialyzer_lexer.xrl", 21).
+-file("src/dialyzer_lexer.xrl", 25).
 yyaction_10(TokenLine) ->
      { token, { '}', TokenLine } } .
 
 -compile({inline,yyaction_11/1}).
--file("src/dialyzer_lexer.xrl", 22).
+-file("src/dialyzer_lexer.xrl", 26).
 yyaction_11(TokenLine) ->
      { token, { '#', TokenLine } } .
 
 -compile({inline,yyaction_12/1}).
--file("src/dialyzer_lexer.xrl", 23).
+-file("src/dialyzer_lexer.xrl", 27).
 yyaction_12(TokenLine) ->
      { token, { '|', TokenLine } } .
 
 -compile({inline,yyaction_13/1}).
--file("src/dialyzer_lexer.xrl", 24).
+-file("src/dialyzer_lexer.xrl", 28).
 yyaction_13(TokenLine) ->
      { token, { '_', TokenLine } } .
 
 -compile({inline,yyaction_14/1}).
--file("src/dialyzer_lexer.xrl", 25).
+-file("src/dialyzer_lexer.xrl", 29).
 yyaction_14(TokenLine) ->
      { token, { '::', TokenLine } } .
 
 -compile({inline,yyaction_15/1}).
--file("src/dialyzer_lexer.xrl", 26).
+-file("src/dialyzer_lexer.xrl", 30).
 yyaction_15(TokenLine) ->
      { token, { ':', TokenLine } } .
 
 -compile({inline,yyaction_16/1}).
--file("src/dialyzer_lexer.xrl", 27).
+-file("src/dialyzer_lexer.xrl", 31).
 yyaction_16(TokenLine) ->
      { token, { ':=', TokenLine } } .
 
 -compile({inline,yyaction_17/1}).
--file("src/dialyzer_lexer.xrl", 28).
+-file("src/dialyzer_lexer.xrl", 32).
 yyaction_17(TokenLine) ->
      { token, { '=>', TokenLine } } .
 
 -compile({inline,yyaction_18/1}).
--file("src/dialyzer_lexer.xrl", 29).
+-file("src/dialyzer_lexer.xrl", 33).
 yyaction_18(TokenLine) ->
      { token, { '->', TokenLine } } .
 
 -compile({inline,yyaction_19/1}).
--file("src/dialyzer_lexer.xrl", 30).
+-file("src/dialyzer_lexer.xrl", 34).
 yyaction_19(TokenLine) ->
      { token, { '|', TokenLine } } .
 
 -compile({inline,yyaction_20/1}).
--file("src/dialyzer_lexer.xrl", 31).
+-file("src/dialyzer_lexer.xrl", 35).
 yyaction_20(TokenLine) ->
      { token, { '<<', TokenLine } } .
 
 -compile({inline,yyaction_21/1}).
--file("src/dialyzer_lexer.xrl", 32).
+-file("src/dialyzer_lexer.xrl", 36).
 yyaction_21(TokenLine) ->
      { token, { '<', TokenLine } } .
 
 -compile({inline,yyaction_22/1}).
--file("src/dialyzer_lexer.xrl", 33).
+-file("src/dialyzer_lexer.xrl", 37).
 yyaction_22(TokenLine) ->
      { token, { '>>', TokenLine } } .
 
 -compile({inline,yyaction_23/1}).
--file("src/dialyzer_lexer.xrl", 34).
+-file("src/dialyzer_lexer.xrl", 38).
 yyaction_23(TokenLine) ->
      { token, { '>', TokenLine } } .
 
 -compile({inline,yyaction_24/1}).
--file("src/dialyzer_lexer.xrl", 35).
+-file("src/dialyzer_lexer.xrl", 39).
 yyaction_24(TokenLine) ->
      { token, { '\'', TokenLine } } .
 
 -compile({inline,yyaction_25/1}).
--file("src/dialyzer_lexer.xrl", 36).
+-file("src/dialyzer_lexer.xrl", 40).
 yyaction_25(TokenLine) ->
      { token, { ',', TokenLine } } .
 
 -compile({inline,yyaction_26/1}).
--file("src/dialyzer_lexer.xrl", 37).
+-file("src/dialyzer_lexer.xrl", 41).
 yyaction_26(TokenLine) ->
      { token, { '=', TokenLine } } .
 
 -compile({inline,yyaction_27/1}).
--file("src/dialyzer_lexer.xrl", 38).
+-file("src/dialyzer_lexer.xrl", 42).
 yyaction_27(TokenLine) ->
      { token, { '..', TokenLine } } .
 
 -compile({inline,yyaction_28/2}).
--file("src/dialyzer_lexer.xrl", 39).
+-file("src/dialyzer_lexer.xrl", 43).
 yyaction_28(TokenChars, TokenLine) ->
      { token, { int, TokenLine, list_to_integer (TokenChars) } } .
 
 -compile({inline,yyaction_29/2}).
--file("src/dialyzer_lexer.xrl", 40).
+-file("src/dialyzer_lexer.xrl", 44).
 yyaction_29(TokenChars, TokenLine) ->
      { token, { atom_full, TokenLine, TokenChars } } .
 
 -compile({inline,yyaction_30/2}).
--file("src/dialyzer_lexer.xrl", 41).
+-file("src/dialyzer_lexer.xrl", 45).
 yyaction_30(TokenChars, TokenLine) ->
      { token, { atom_part, TokenLine, TokenChars } } .
 
