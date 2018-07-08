@@ -45,6 +45,7 @@ defmodule Dialyzer.Plt.Builder do
     apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
     prev_plt_apps = []
 
+    ensure_dir_accessible!(path)
     Plt.Command.new(path)
     build_plt(path, apps, prev_plt_apps)
   end
@@ -60,7 +61,7 @@ defmodule Dialyzer.Plt.Builder do
 
   defp build_plt(:project, config) do
     path = Plt.Path.project_plt()
-    apps = project_apps(config) |> Enum.map(&Plt.App.info/1)
+    apps = project_apps(config) |> Enum.map(&Plt.App.info/1) |> Enum.filter(&(&1 != nil))
     prev_plt_apps = elixir_apps() |> Enum.map(&Plt.App.info/1)
 
     Plt.Command.copy(Plt.Path.elixir_plt(), path)
@@ -94,7 +95,7 @@ defmodule Dialyzer.Plt.Builder do
         nil
 
       {:error, error} ->
-        raise "Could not access: #{Plt.Path.home_dir()}. Error: #{to_string(error)}"
+        raise "Could not write: #{dir}. Error: #{to_string(error)}"
     end
   end
 end
