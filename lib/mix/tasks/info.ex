@@ -1,5 +1,10 @@
 defmodule Mix.Tasks.Dialyzer.Info do
   @shortdoc "Gets informations about the dialyzer enviroment"
+  @moduledoc """
+  Displays some informations about your dialyzer enviroment,
+  like analyzed applications and dependencies, active and ignored
+  warnings, build paths analyzed and so on.
+  """
 
   use Mix.Task
   import Dialyzer.Logger
@@ -34,7 +39,7 @@ defmodule Mix.Tasks.Dialyzer.Info do
 
   def run(_args) do
     Mix.Project.compile([])
-    Application.ensure_all_started(:mix_dialyzer)
+    _ = Application.ensure_all_started(:mix_dialyzer)
 
     config = Dialyzer.Config.load()
 

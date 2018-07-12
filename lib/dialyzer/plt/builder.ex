@@ -6,10 +6,9 @@ defmodule Dialyzer.Plt.Builder do
   It builds incrementally all the plts and checks
   for their consistency through dialyzer.
   """
-  @spec build(Config.t()) :: none
+  @spec build(Config.t()) :: :ok
   def build(config) do
-    Plt.missing_plts()
-    |> Enum.each(fn plt -> build_plt(plt, config) end)
+    Enum.each(Plt.missing_plts(), fn plt -> build_plt(plt, config) end)
   end
 
   @doc """
@@ -22,7 +21,7 @@ defmodule Dialyzer.Plt.Builder do
   It returns the apps used to build the elixir plt.
   """
   @spec elixir_apps :: [atom]
-  def elixir_apps, do: erlang_apps() ++ [:elixir]
+  def elixir_apps, do: erlang_apps() ++ [:elixir, :mix]
 
   @doc """
   It returns the apps used to build the project plt.
@@ -41,7 +40,7 @@ defmodule Dialyzer.Plt.Builder do
     |> Enum.uniq()
   end
 
-  @spec build_plt(atom, Config.t()) :: none
+  @spec build_plt(atom, Config.t()) :: :ok | :error
   defp build_plt(:erlang, _config) do
     path = Plt.Path.erlang_plt()
     apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
@@ -79,8 +78,8 @@ defmodule Dialyzer.Plt.Builder do
     remove = MapSet.difference(prev_plt_files, plt_files)
     add = MapSet.difference(plt_files, prev_plt_files)
 
-    Plt.Command.remove(path, remove)
-    Plt.Command.add(path, add)
+    Plt.Command.remove(path, Enum.to_list(remove))
+    Plt.Command.add(path, Enum.to_list(add))
     Plt.Command.check(path)
   end
 
@@ -90,14 +89,15 @@ defmodule Dialyzer.Plt.Builder do
     |> MapSet.new()
   end
 
-  @spec ensure_dir_accessible!(String.t()) :: none
+  @spec ensure_dir_accessible!(String.t()) :: :ok | :error
   defp ensure_dir_accessible!(dir) do
     case :filelib.ensure_dir(dir) do
       :ok ->
-        nil
+        :ok
 
       {:error, error} ->
         raise "Could not write: #{dir}. Error: #{to_string(error)}"
+        :error
     end
   end
 end

@@ -2,7 +2,7 @@ defmodule Dialyzer.Warnings do
   alias Dialyzer.{Warning, Config.IgnoreWarning}
   import Dialyzer.Logger, only: [color: 2]
 
-  @spec format_and_print(list(), Dialyzer.Config.t()) :: none
+  @spec format_and_print(list(), Dialyzer.Config.t()) :: :ok
   def format_and_print(warnings, config) do
     warnings = Enum.map(warnings, &Warning.new/1)
 
@@ -21,7 +21,7 @@ defmodule Dialyzer.Warnings do
     print_warnings_without_mapping(warnings_to_emit, warnings_without_mapping)
   end
 
-  @spec print_header_stats([Warning.t()], [Warning.t()]) :: none
+  @spec print_header_stats([Warning.t()], [Warning.t()]) :: :ok
   defp print_header_stats(warnings, warnings_to_emit) do
     """
 
@@ -36,7 +36,7 @@ defmodule Dialyzer.Warnings do
     |> IO.puts()
   end
 
-  @spec print_stats([Warning.t()], [Warning.t()]) :: none
+  @spec print_stats([Warning.t()], [Warning.t()]) :: :ok
   defp print_stats(warnings, warnings_to_emit) do
     warnings
     |> Enum.group_by(fn warning -> warning.name end)
@@ -56,18 +56,20 @@ defmodule Dialyzer.Warnings do
     |> Scribe.print(style: Scribe.Style.Pseudo)
   end
 
-  @spec print_warnings([Warning.t()], :short | :long) :: none
+  @spec print_warnings([Warning.t()], :short | :long) :: :ok
   defp print_warnings(warnings, format) do
-    IO.puts(color(:yellow, "* WARNINGS\n"))
+    if Enum.count(warnings) > 0 do
+      IO.puts(color(:yellow, "* WARNINGS\n"))
 
-    warnings
-    |> Dialyzer.Formatter.format(format)
-    |> Enum.each(fn message ->
-      IO.puts(message)
-    end)
+      warnings
+      |> Dialyzer.Formatter.format(format)
+      |> Enum.each(fn message ->
+        IO.puts(message)
+      end)
+    end
   end
 
-  @spec print_warnings_without_mapping([Warning.t()], [IgnoreWarning.t()]) :: none
+  @spec print_warnings_without_mapping([Warning.t()], [IgnoreWarning.t()]) :: :ok
   defp print_warnings_without_mapping(emitted_warnings, warnings_without_mapping) do
     if Enum.count(warnings_without_mapping) > 0 do
       message =
@@ -108,7 +110,7 @@ defmodule Dialyzer.Warnings do
     end
   end
 
-  @spec print_footer() :: none
+  @spec print_footer() :: :ok
   defp print_footer do
     """
 

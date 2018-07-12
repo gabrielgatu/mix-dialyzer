@@ -16,10 +16,7 @@ defmodule Dialyzer.Formatter do
   end
 
   defp format_warning(warning, type) do
-    relative_filepath =
-      warning.file
-      |> Path.relative_to_cwd()
-      |> inspect(limit: :infinity, printable_limit: :infinity)
+    relative_filepath = Path.relative_to_cwd(warning.file)
 
     try do
       warning_formatter = fetch_warning(warning.name)
@@ -93,7 +90,7 @@ defmodule Dialyzer.Formatter do
     warning_fragment = if warning_name != "", do: " #{String.upcase(warning_name)} ", else: ""
     filepath_fragment = case line_nr do
       0 -> filepath
-      _ -> " #{filepath}:#{line_nr}"
+      _ -> " #{filepath}:#{line_nr} "
     end
 
     len = 80 - (String.length(warning_fragment) + String.length(filepath_fragment))

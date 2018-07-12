@@ -46,7 +46,6 @@ defmodule Dialyzer.Config do
     [
       :unmatched_returns,
       :error_handling,
-      :underspecs,
       :unknown
     ]
   end
@@ -113,7 +112,7 @@ defmodule Dialyzer.Config do
     ]
   end
 
-  @spec create_config_file(Keyword.t()) :: none
+  @spec create_config_file(Keyword.t()) :: :ok
   defp create_config_file(content) do
     path()
     |> File.write!(

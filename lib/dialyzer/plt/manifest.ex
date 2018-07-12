@@ -49,13 +49,15 @@ defmodule Dialyzer.Plt.Manifest do
   @doc """
   It updates the manifest file by saving the current enviroment.
   """
-  @spec update() :: none
+  @spec update() :: :ok
   def update do
     apps = all_applications()
     content = [apps: apps]
 
-    path()
-    |> File.write!(inspect(content, limit: :infinity, printable_limit: :infinity))
+    write_content = inspect(content, limit: :infinity, printable_limit: :infinity)
+    File.write!(path(), write_content)
+
+    :ok
   end
 
   @doc """

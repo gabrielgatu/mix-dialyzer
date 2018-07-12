@@ -1,7 +1,7 @@
 defmodule Dialyzer do
   alias Dialyzer.Config
 
-  @spec run(Config.t()) :: [String.t()]
+  @spec run(Config.t()) :: :ok
   def run(config) do
     Dialyzer.Plt.ensure_loaded(config)
 

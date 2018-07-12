@@ -5,7 +5,7 @@ defmodule Dialyzer.Plt.Updater do
   It updates the project plt by analyzing the manifest file,
   and updating only the applications that really changed.
   """
-  @spec update(Config.t()) :: none
+  @spec update(Config.t()) :: :ok
   def update(config) do
     changes = Plt.Manifest.changes(config)
     plt = Plt.Path.project_plt()
