@@ -85,7 +85,12 @@ defmodule Dialyzer.Plt.Builder do
 
   @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()
   defp collect_files_from_apps(apps) do
-    Enum.flat_map(apps, fn app -> Enum.map(app.mods, & &1.filepath) end)
+    Enum.flat_map(apps, fn app ->
+      app
+      |> Map.fetch!(:mods)
+      |> Enum.map(& &1.filepath)
+      |> Enum.filter(&(not is_atom(&1)))
+    end)
     |> MapSet.new()
   end
 

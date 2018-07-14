@@ -6,26 +6,9 @@
   warnings: [
     ignore: [
       {"non_existing", :*, :unknown_type},
-
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/beam_lib.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/kernel-5.4.3/ebin/code.beam", :*, :unknown_function},
       {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/dialyzer-3.2.4/ebin/dialyzer.beam",:*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/erl_anno.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/erl_scan.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/erl_scan.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/erl_scan.beam", :*, :unknown_function},
       {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/hipe-3.17.1/ebin/erl_types.beam", :*, :unknown_function},
       {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/hipe-3.17.1/ebin/erl_types.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/filelib.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/io_lib.beam", :*,:unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/io_lib.beam", :*,:unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/io_lib.beam", :*,:unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/io_lib.beam", :*,:unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/io_lib.beam", :*,:unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/io_lib.beam", :*,:unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/lists.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/maps.beam", :*, :unknown_function},
-      {"/usr/local/Cellar/erlang/20.3.6/lib/erlang/lib/stdlib-3.4.5/ebin/maps.beam", :*, :unknown_function},
       {"lib/dialyzer/config/config.ex", 73, :invalid_contract},
       {"lib/dialyzer/config/config.ex", 129, :invalid_contract},
 

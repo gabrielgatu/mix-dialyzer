@@ -8,8 +8,7 @@ defmodule Dialyzer.Warnings do
 
     ignored_tuples = Enum.map(config.warnings[:ignore], &IgnoreWarning.new/1)
 
-    warning_mappings =
-      IgnoreWarning.associate_with_emitted_warnings(ignored_tuples, warnings)
+    warning_mappings = IgnoreWarning.associate_with_emitted_warnings(ignored_tuples, warnings)
 
     warnings_to_emit = IgnoreWarning.Mapping.filter_warnings_to_emit(warnings, warning_mappings)
     warnings_without_mapping = IgnoreWarning.Mapping.filter_unmatched_warnings(warning_mappings)
@@ -83,16 +82,27 @@ defmodule Dialyzer.Warnings do
               header
 
             matches ->
-              formatted_matches = Enum.reduce(matches, "", fn match, acc ->
-                ignore_warning_tuple = Warning.to_ignore_format(match)
-                acc <>
-                  "\n    #{
-                    color(:cyan, inspect(ignore_warning_tuple, limit: :infinity, printable_limit: :infinity))
-                  }"
-              end)
+              formatted_matches =
+                Enum.reduce(matches, "", fn match, acc ->
+                  ignore_warning_tuple = Warning.to_ignore_format(match)
+
+                  acc <>
+                    "\n    #{
+                      color(
+                        :cyan,
+                        inspect(
+                          ignore_warning_tuple,
+                          limit: :infinity,
+                          printable_limit: :infinity
+                        )
+                      )
+                    }"
+                end)
 
               header
-              |> Kernel.<>("\n\n    From the warnings emitted I have found these warnings that could have been the ones you were trying to ignore:\n")
+              |> Kernel.<>(
+                "\n\n    From the warnings emitted I have found these warnings that could have been the ones you were trying to ignore:\n"
+              )
               |> Kernel.<>(formatted_matches)
               |> Kernel.<>(acc)
           end
