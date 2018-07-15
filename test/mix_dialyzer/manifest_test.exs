@@ -4,17 +4,9 @@ defmodule Dialyzer.Plt.ManifestTest do
   alias Dialyzer.Config
   alias Dialyzer.Plt.{Manifest}
 
-  setup_all do
-    Application.ensure_all_started(:mix_dialyzer)
-    {name, path} = create_temporary_project()
-    %{name: name, path: path}
-  end
-
   describe "when inside a new project" do
-    test "it doesn't have a manifest file", %{name: name, path: path} do
-      app = String.to_atom(name)
-
-      Mix.Project.in_project(app, path, fn _ ->
+    test "it doesn't have a manifest file" do
+      in_project(:base_project, fn ->
         Manifest.path() |> File.rm()
 
         config = Config.load()
@@ -24,10 +16,8 @@ defmodule Dialyzer.Plt.ManifestTest do
   end
 
   describe "when the manifest file exists" do
-    test "it doesn't return :missing when requesting the status", %{name: name, path: path} do
-      app = String.to_atom(name)
-
-      Mix.Project.in_project(app, path, fn _ ->
+    test "it doesn't return :missing when requesting the status" do
+      in_project(:base_project, fn ->
         config = Config.load()
         Dialyzer.Plt.ensure_loaded(config)
         Manifest.update()
@@ -36,10 +26,8 @@ defmodule Dialyzer.Plt.ManifestTest do
       end)
     end
 
-    test "it detects correctly the status", %{name: name, path: path} do
-      app = String.to_atom(name)
-
-      Mix.Project.in_project(app, path, fn _ ->
+    test "it detects correctly the status" do
+      in_project(:base_project, fn ->
         config = Config.load()
         Dialyzer.Plt.ensure_loaded(config)
         Manifest.update()
@@ -51,10 +39,8 @@ defmodule Dialyzer.Plt.ManifestTest do
       end)
     end
 
-    test "it detects correctly if the apps changes", %{name: name, path: path} do
-      app = String.to_atom(name)
-
-      Mix.Project.in_project(app, path, fn _ ->
+    test "it detects correctly if the apps changes" do
+      in_project(:base_project, fn ->
         config = Config.load()
         Manifest.update()
 
