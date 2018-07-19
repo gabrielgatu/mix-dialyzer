@@ -2,8 +2,8 @@ defmodule Dialyzer.Warnings do
   alias Dialyzer.{Warning, Config.IgnoreWarning}
   import Dialyzer.Logger, only: [color: 2]
 
-  @spec format_and_print(list(), Dialyzer.Config.t()) :: :ok
-  def format_and_print(warnings, config) do
+  @spec format(list(), Dialyzer.Config.t()) :: String.t()
+  def format(warnings, config) do
     warnings = Enum.map(warnings, &Warning.new/1)
 
     ignored_tuples = Enum.map(config.warnings[:ignore], &IgnoreWarning.new/1)
@@ -13,14 +13,17 @@ defmodule Dialyzer.Warnings do
     warnings_to_emit = IgnoreWarning.Mapping.filter_warnings_to_emit(warnings, warning_mappings)
     warnings_without_mapping = IgnoreWarning.Mapping.filter_unmatched_warnings(warning_mappings)
 
-    print_header_stats(warnings, warnings_to_emit)
-    print_stats(warnings, warnings_to_emit)
-    print_footer()
-    print_warnings(warnings_to_emit, config.cmd.msg_type)
-    print_warnings_without_mapping(warnings_to_emit, warnings_without_mapping)
+    [
+      print_header_stats(warnings, warnings_to_emit),
+      print_stats(warnings, warnings_to_emit),
+      print_footer(),
+      print_warnings(warnings_to_emit, config.cmd.msg_type),
+      print_warnings_without_mapping(warnings_to_emit, warnings_without_mapping)
+    ]
+    |> Enum.join("")
   end
 
-  @spec print_header_stats([Warning.t()], [Warning.t()]) :: :ok
+  @spec print_header_stats([Warning.t()], [Warning.t()]) :: String.t()
   defp print_header_stats(warnings, warnings_to_emit) do
     """
 
@@ -32,10 +35,9 @@ defmodule Dialyzer.Warnings do
     }
 
     """
-    |> IO.puts()
   end
 
-  @spec print_stats([Warning.t()], [Warning.t()]) :: :ok
+  @spec print_stats([Warning.t()], [Warning.t()]) :: String.t()
   defp print_stats(warnings, warnings_to_emit) do
     warnings
     |> Enum.group_by(fn warning -> warning.name end)
@@ -52,23 +54,28 @@ defmodule Dialyzer.Warnings do
 
       %{warning: warning_name, num_ignored: num_ignored, num_emitted: num_warnings}
     end)
-    |> Scribe.print(style: Scribe.Style.Pseudo)
-  end
-
-  @spec print_warnings([Warning.t()], :short | :long) :: :ok
-  defp print_warnings(warnings, format) do
-    if Enum.count(warnings) > 0 do
-      IO.puts(color(:yellow, "* WARNINGS\n"))
-
-      warnings
-      |> Dialyzer.Formatter.format(format)
-      |> Enum.each(fn message ->
-        IO.puts(message)
-      end)
+    |> Scribe.format(style: Scribe.Style.Pseudo)
+    |> case do
+      :ok -> ""
+      text -> text
     end
   end
 
-  @spec print_warnings_without_mapping([Warning.t()], [IgnoreWarning.t()]) :: :ok
+  @spec print_warnings([Warning.t()], :short | :long) :: String.t()
+  defp print_warnings(warnings, format) do
+    if Enum.count(warnings) > 0 do
+      header = color(:yellow, "* WARNINGS\n")
+
+      body =
+        warnings
+        |> Dialyzer.Formatter.format(format)
+        |> Enum.join("\n")
+
+      "\n#{header}\n#{body}"
+    end
+  end
+
+  @spec print_warnings_without_mapping([Warning.t()], [IgnoreWarning.t()]) :: String.t()
   defp print_warnings_without_mapping(emitted_warnings, warnings_without_mapping) do
     if Enum.count(warnings_without_mapping) > 0 do
       message =
@@ -110,17 +117,17 @@ defmodule Dialyzer.Warnings do
 
       """
 
+
       No match has been found for these ignored warnings you specified in #{
-        color(:cyan, "`.dialyzer.exs`")
+        color(:cyan, ".dialyzer.exs")
       }:
 
       #{message |> String.trim()}
       """
-      |> IO.puts()
     end
   end
 
-  @spec print_footer() :: :ok
+  @spec print_footer() :: String.t()
   defp print_footer do
     """
 
@@ -144,6 +151,5 @@ defmodule Dialyzer.Warnings do
     When printing with the *long* format, the tuple to ignore a specific warning will be
     automatically printed for each warning!
     """
-    |> IO.puts()
   end
 end

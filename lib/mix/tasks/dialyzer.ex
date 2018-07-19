@@ -43,5 +43,6 @@ defmodule Mix.Tasks.Dialyzer do
     |> Dialyzer.CommandLine.Config.parse()
     |> Dialyzer.Config.load()
     |> Dialyzer.run()
+    |> IO.puts()
   end
 end

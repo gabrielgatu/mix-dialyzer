@@ -1,7 +1,7 @@
 defmodule Dialyzer do
   alias Dialyzer.Config
 
-  @spec run(Config.t()) :: :ok
+  @spec run(Config.t()) :: String.t()
   def run(config) do
     Dialyzer.Plt.ensure_loaded(config)
 
@@ -9,6 +9,6 @@ defmodule Dialyzer do
     |> Config.to_erlang_format()
     |> Kernel.++(check_plt: false)
     |> :dialyzer.run()
-    |> Dialyzer.Warnings.format_and_print(config)
+    |> Dialyzer.Warnings.format(config)
   end
 end
