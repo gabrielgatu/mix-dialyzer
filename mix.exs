@@ -8,6 +8,7 @@ defmodule Dialyzer.MixProject do
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
+      aliases: aliases(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: [
         coveralls: :test,
@@ -29,6 +30,15 @@ defmodule Dialyzer.MixProject do
     [
       {:scribe, "~> 0.8"},
       {:excoveralls, "~> 0.8", only: [:test]}
+    ]
+  end
+
+  defp aliases do
+    [
+      "test": [
+        "run ./test.setup.exs",
+        "test"
+      ]
     ]
   end
 end
