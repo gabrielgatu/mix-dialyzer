@@ -31,8 +31,8 @@ defmodule Dialyzer.Formatter.Warnings.Call do
         signature_return,
         contract
       ]) do
-    pretty_args = Dialyzer.Formatter.PrettyPrint.pretty_print_args(args)
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
+    pretty_args = Erlex.pretty_print_args(args)
+    pretty_module = Erlex.pretty_print(module)
 
     call_string =
       Dialyzer.Formatter.WarningHelpers.call_or_apply_to_string(

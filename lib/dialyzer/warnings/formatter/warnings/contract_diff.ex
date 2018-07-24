@@ -23,9 +23,9 @@ defmodule Dialyzer.Formatter.Warnings.ContractDiff do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([module, function, arity, contract, signature]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
-    pretty_contract = Dialyzer.Formatter.PrettyPrint.pretty_print_type(contract)
-    pretty_signature = Dialyzer.Formatter.PrettyPrint.pretty_print_type(signature)
+    pretty_module = Erlex.pretty_print(module)
+    pretty_contract = Erlex.pretty_print_type(contract)
+    pretty_signature = Erlex.pretty_print_type(signature)
 
     """
     Type specification is not equal to the success typing.

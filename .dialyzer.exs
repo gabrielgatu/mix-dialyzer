@@ -12,8 +12,6 @@
       {"lib/dialyzer/config/config.ex", 73, :invalid_contract},
       {"lib/dialyzer/config/config.ex", 129, :invalid_contract},
 
-      {"lib/dialyzer/warnings/formatter/pretty_print.ex", :*, :no_return},
-      {"lib/dialyzer/warnings/formatter/warning_helpers.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/app_call.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/apply.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/binary_construction.ex", :*, :no_return},
@@ -23,8 +21,6 @@
       {"lib/dialyzer/warnings/formatter/warnings/callback_spec_type_mismatch.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/callback_type_mismatch.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/contract_diff.ex", :*, :no_return},
-      {"lib/dialyzer/warnings/formatter/warnings/contract_subtype.ex", :*, :no_return},
-      {"lib/dialyzer/warnings/formatter/warnings/contract_supertype.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/contract_with_opaque.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/exact_equality.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/extra_range.ex", :*, :no_return},
@@ -32,11 +28,10 @@
       {"lib/dialyzer/warnings/formatter/warnings/function_application_no_function.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/guard_fail_pattern.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/improper_list_construction.ex", :*, :no_return},
-      {"lib/dialyzer/warnings/formatter/warnings/invalid_contract.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/pattern_match.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/pattern_match_covered.ex", :*, :no_return},
       {"lib/dialyzer/warnings/formatter/warnings/race_condition.ex", :*, :no_return},
-      {"lib/dialyzer/warnings/formatter/warnings/unmatched_return.ex", :*, :no_return}
+      {"lib/dialyzer/warnings/formatter/warnings/unmatched_return.ex", :*, :no_return},
     ],
     active: [
       :unmatched_returns,

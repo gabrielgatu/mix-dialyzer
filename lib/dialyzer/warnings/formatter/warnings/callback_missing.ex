@@ -16,7 +16,7 @@ defmodule Dialyzer.Formatter.Warnings.CallbackMissing do
   @impl Dialyzer.Formatter.Warning
   @spec format_short([String.t()]) :: String.t()
   def format_short([behaviour, function, arity]) do
-    pretty_behaviour = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
+    pretty_behaviour = Erlex.pretty_print(behaviour)
 
     "Undefined callback function #{function}/#{arity} (behaviour #{pretty_behaviour})."
   end
@@ -24,7 +24,7 @@ defmodule Dialyzer.Formatter.Warnings.CallbackMissing do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([behaviour, function, arity]) do
-    pretty_behaviour = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
+    pretty_behaviour = Erlex.pretty_print(behaviour)
 
     """
     Module implements a behaviour but does not have all of its

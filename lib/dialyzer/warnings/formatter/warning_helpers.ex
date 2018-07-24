@@ -17,7 +17,7 @@ defmodule Dialyzer.Formatter.WarningHelpers do
         _signature_return,
         {_overloaded?, _contract}
       ) do
-    pretty_signature_args = Dialyzer.Formatter.PrettyPrint.pretty_print_args(signature_args)
+    pretty_signature_args = Erlex.pretty_print_args(signature_args)
 
     if Enum.empty?(arg_positions) do
       # We do not know which argument(s) caused the failure
@@ -44,7 +44,7 @@ defmodule Dialyzer.Formatter.WarningHelpers do
         _signature_return,
         {overloaded?, contract}
       ) do
-    pretty_contract = Dialyzer.Formatter.PrettyPrint.pretty_print_contract(contract)
+    pretty_contract = Erlex.pretty_print_contract(contract)
 
     if Enum.empty?(arg_positions) or overloaded? do
       # We do not know which arguments caused the failure
@@ -72,10 +72,10 @@ defmodule Dialyzer.Formatter.WarningHelpers do
         signature_return,
         {_overloaded?, contract}
       ) do
-    pretty_contract = Dialyzer.Formatter.PrettyPrint.pretty_print_contract(contract)
+    pretty_contract = Erlex.pretty_print_contract(contract)
 
     pretty_print_signature =
-      Dialyzer.Formatter.PrettyPrint.pretty_print_contract(
+      Erlex.pretty_print_contract(
         "#{signature_args} -> #{signature_return}"
       )
 

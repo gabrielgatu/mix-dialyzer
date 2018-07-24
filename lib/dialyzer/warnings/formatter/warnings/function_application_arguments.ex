@@ -22,8 +22,8 @@ defmodule Dialyzer.Formatter.Warnings.FuncionApplicationArguments do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([args, type]) do
-    pretty_args = Dialyzer.Formatter.PrettyPrint.pretty_print_args(args)
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print(type)
+    pretty_args = Erlex.pretty_print_args(args)
+    pretty_type = Erlex.pretty_print(type)
 
     "Function call with arguments #{pretty_args} will fail " <>
       "since the function has type #{pretty_type}."

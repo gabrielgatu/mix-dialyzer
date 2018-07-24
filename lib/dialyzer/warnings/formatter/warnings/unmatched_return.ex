@@ -23,7 +23,7 @@ defmodule Dialyzer.Formatter.Warnings.UnmatchedReturn do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([type]) do
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(type)
+    pretty_type = Erlex.pretty_print_type(type)
 
     """
     The invoked expression returns a union of types and the call does

@@ -23,9 +23,9 @@ defmodule Dialyzer.Formatter.Warnings.ContractWithOpaque do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([module, function, arity, type, signature_type]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(type)
-    pretty_success_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(signature_type)
+    pretty_module = Erlex.pretty_print(module)
+    pretty_type = Erlex.pretty_print_type(type)
+    pretty_success_type = Erlex.pretty_print_type(signature_type)
 
     """
     The @spec says the function is returning an opaque type but it is

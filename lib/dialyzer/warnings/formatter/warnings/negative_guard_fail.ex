@@ -23,7 +23,7 @@ defmodule Dialyzer.Formatter.Warnings.NegativeGuardFail do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([guard, args]) do
-    pretty_args = Dialyzer.Formatter.PrettyPrint.pretty_print_args(args)
+    pretty_args = Erlex.pretty_print_args(args)
 
     """
     The function guard either presents an impossible guard or the only
@@ -37,7 +37,7 @@ defmodule Dialyzer.Formatter.Warnings.NegativeGuardFail do
   end
 
   def format_long([arg1, infix, arg2]) do
-    pretty_infix = Dialyzer.Formatter.PrettyPrint.pretty_print_infix(infix)
+    pretty_infix = Erlex.pretty_print_infix(infix)
 
     """
     The function guard either presents an impossible guard or the only

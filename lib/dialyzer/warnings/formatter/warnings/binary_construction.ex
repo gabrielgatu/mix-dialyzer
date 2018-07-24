@@ -22,7 +22,7 @@ defmodule Dialyzer.Formatter.Warnings.BinaryConstruction do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([culprit, size, segment, type]) do
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(type)
+    pretty_type = Erlex.pretty_print_type(type)
 
     """
     Binary construction will fail since the #{culprit} field #{size} in

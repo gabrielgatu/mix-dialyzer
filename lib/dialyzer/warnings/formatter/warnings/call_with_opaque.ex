@@ -22,7 +22,7 @@ defmodule Dialyzer.Formatter.Warnings.CallWithOpaque do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([module, function, args, arg_positions, expected_args]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
+    pretty_module = Erlex.pretty_print(module)
 
     """
     The call #{pretty_module}.#{function}#{args} contains #{form_positions(arg_positions)}

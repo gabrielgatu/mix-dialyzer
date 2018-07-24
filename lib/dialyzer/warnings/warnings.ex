@@ -86,7 +86,7 @@ defmodule Dialyzer.Warnings do
           |> IgnoreWarning.find_suggestions_for_unmatched_warns(warning)
           |> case do
             [] ->
-              header
+              acc <> header
 
             matches ->
               formatted_matches =

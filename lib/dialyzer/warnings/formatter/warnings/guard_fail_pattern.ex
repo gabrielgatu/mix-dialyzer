@@ -22,8 +22,8 @@ defmodule Dialyzer.Formatter.Warnings.GuardFailPattern do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([pattern, type]) do
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(type)
-    pretty_pattern = Dialyzer.Formatter.PrettyPrint.pretty_print_pattern(pattern)
+    pretty_type = Erlex.pretty_print_type(type)
+    pretty_pattern = Erlex.pretty_print_pattern(pattern)
 
     """
     The guard describes a condition of literals that fails the pattern

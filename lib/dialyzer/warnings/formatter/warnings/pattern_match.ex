@@ -23,8 +23,8 @@ defmodule Dialyzer.Formatter.Warnings.PatternMatch do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([pattern, type]) do
-    pretty_pattern = Dialyzer.Formatter.PrettyPrint.pretty_print_pattern(pattern)
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(type)
+    pretty_pattern = Erlex.pretty_print_pattern(pattern)
+    pretty_type = Erlex.pretty_print_type(type)
 
     """
     The pattern matching is never given a value that satisfies all of

@@ -23,11 +23,11 @@ defmodule Dialyzer.Formatter.Warnings.ContractSubtype do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([module, function, arity, contract, signature]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
-    pretty_signature = Dialyzer.Formatter.PrettyPrint.pretty_print_contract(signature)
+    pretty_module = Erlex.pretty_print(module)
+    pretty_signature = Erlex.pretty_print_contract(signature)
 
     pretty_contract =
-      Dialyzer.Formatter.PrettyPrint.pretty_print_contract(contract, module, function)
+      Erlex.pretty_print_contract(contract, module, function)
 
     """
     The type in the @spec does not completely cover the types returned

@@ -29,7 +29,7 @@ defmodule Dialyzer.Formatter.Warnings.OpaqueMatch do
         opaque_term
       end
 
-    pretty_pattern = Dialyzer.Formatter.PrettyPrint.pretty_print(pattern)
+    pretty_pattern = Erlex.pretty_print(pattern)
 
     """
     The attempt to match a term of type #{opaque_term} against the #{pretty_pattern}

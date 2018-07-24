@@ -22,7 +22,7 @@ defmodule Dialyzer.Formatter.Warnings.Apply do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([args, arg_positions, fail_reason, signature_args, signature_return, contract]) do
-    pretty_args = Dialyzer.Formatter.PrettyPrint.pretty_print_args(args)
+    pretty_args = Erlex.pretty_print_args(args)
 
     call_string =
       Dialyzer.Formatter.WarningHelpers.call_or_apply_to_string(

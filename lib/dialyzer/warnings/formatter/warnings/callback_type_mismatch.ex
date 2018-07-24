@@ -17,16 +17,16 @@ defmodule Dialyzer.Formatter.Warnings.CallbackTypeMismatch do
   @impl Dialyzer.Formatter.Warning
   @spec format_short([String.t()]) :: String.t()
   def format_short([behaviour, function, arity, _fail_type, _success_type]) do
-    pretty_behaviour = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
+    pretty_behaviour = Erlex.pretty_print(behaviour)
     "Callback mismatch for @callback #{function}/#{arity} in #{pretty_behaviour} behaviour."
   end
 
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t() | non_neg_integer]) :: String.t()
   def format_long([behaviour, function, arity, fail_type, success_type]) do
-    pretty_behaviour = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
-    pretty_fail_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(fail_type)
-    pretty_success_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(success_type)
+    pretty_behaviour = Erlex.pretty_print(behaviour)
+    pretty_fail_type = Erlex.pretty_print_type(fail_type)
+    pretty_success_type = Erlex.pretty_print_type(success_type)
 
     """
     The success type of the function does not match the callback type

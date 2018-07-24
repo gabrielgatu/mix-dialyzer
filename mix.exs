@@ -28,6 +28,7 @@ defmodule Dialyzer.MixProject do
 
   defp deps do
     [
+      {:erlex, "~> 0.1.0"},
       {:scribe, "~> 0.8"},
       {:excoveralls, "~> 0.8", only: [:test]}
     ]

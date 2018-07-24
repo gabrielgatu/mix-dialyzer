@@ -17,7 +17,7 @@ defmodule Dialyzer.Formatter.Warnings.ExtraRange do
   @impl Dialyzer.Formatter.Warning
   @spec format_short([String.t()]) :: String.t()
   def format_short([module, function, arity, _extra_ranges, _signature_range]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
+    pretty_module = Erlex.pretty_print(module)
 
     "@spec for #{pretty_module}.#{function}/#{arity} has more types " <>
       "than returned by function."
@@ -26,9 +26,9 @@ defmodule Dialyzer.Formatter.Warnings.ExtraRange do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([module, function, arity, extra_ranges, signature_range]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
-    pretty_extra = Dialyzer.Formatter.PrettyPrint.pretty_print_type(extra_ranges)
-    pretty_signature = Dialyzer.Formatter.PrettyPrint.pretty_print_type(signature_range)
+    pretty_module = Erlex.pretty_print(module)
+    pretty_extra = Erlex.pretty_print_type(extra_ranges)
+    pretty_signature = Erlex.pretty_print_type(signature_range)
 
     """
     The @spec says the function returns more types than the function actually returns.

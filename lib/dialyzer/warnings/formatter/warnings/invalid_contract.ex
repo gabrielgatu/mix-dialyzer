@@ -17,7 +17,7 @@ defmodule Dialyzer.Formatter.Warnings.InvalidContract do
   @impl Dialyzer.Formatter.Warning
   @spec format_short([String.t()]) :: String.t()
   def format_short([module, function, arity, _signature]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
+    pretty_module = Erlex.pretty_print(module)
 
     "Invalid type specification for function #{pretty_module}.#{function}/#{arity}."
   end
@@ -25,8 +25,8 @@ defmodule Dialyzer.Formatter.Warnings.InvalidContract do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([module, function, arity, signature]) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(module)
-    pretty_signature = Dialyzer.Formatter.PrettyPrint.pretty_print_contract(signature)
+    pretty_module = Erlex.pretty_print(module)
+    pretty_signature = Erlex.pretty_print_contract(signature)
 
     """
     The @spec for the function does not match the success typing of

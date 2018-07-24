@@ -20,7 +20,7 @@ defmodule Dialyzer.Formatter.Warnings.UnknownBehaviour do
   @impl Dialyzer.Formatter.Warning
   @spec format_long(String.t()) :: String.t()
   def format_long(behaviour) do
-    pretty_module = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
+    pretty_module = Erlex.pretty_print(behaviour)
 
     "Unknown behaviour: #{pretty_module}."
   end

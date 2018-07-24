@@ -16,7 +16,7 @@ defmodule Dialyzer.Formatter.Warnings.CallbackInfoMissing do
   @impl Dialyzer.Formatter.Warning
   @spec format_short([String.t()]) :: String.t()
   def format_short([behaviour]) do
-    pretty_behaviour = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
+    pretty_behaviour = Erlex.pretty_print(behaviour)
 
     "Callback info about the #{pretty_behaviour} behaviour is not available."
   end
@@ -24,7 +24,7 @@ defmodule Dialyzer.Formatter.Warnings.CallbackInfoMissing do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([behaviour]) do
-    pretty_behaviour = Dialyzer.Formatter.PrettyPrint.pretty_print(behaviour)
+    pretty_behaviour = Erlex.pretty_print(behaviour)
 
     """
     The module is using a behaviour that does not exist or is not a

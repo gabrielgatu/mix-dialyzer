@@ -20,7 +20,7 @@ defmodule Dialyzer.Formatter.Warnings.ImproperListConstruction do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([tl_type]) do
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(tl_type)
+    pretty_type = Erlex.pretty_print_type(tl_type)
 
     "Cons will produce an improper list since its 2nd argument is #{pretty_type}."
   end

@@ -22,8 +22,8 @@ defmodule Dialyzer.Formatter.Warnings.FunctionApplicationNoFunction do
   @impl Dialyzer.Formatter.Warning
   @spec format_long([String.t()]) :: String.t()
   def format_long([op, type, arity]) do
-    pretty_op = Dialyzer.Formatter.PrettyPrint.pretty_print(op)
-    pretty_type = Dialyzer.Formatter.PrettyPrint.pretty_print_type(type)
+    pretty_op = Erlex.pretty_print(op)
+    pretty_type = Erlex.pretty_print_type(type)
 
     """
     The function being invoked exists has an arity mismatch.
