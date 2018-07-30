@@ -36,7 +36,7 @@ defmodule Dialyzer.MixProject do
 
   defp aliases do
     [
-      "test": [
+      test: [
         "run ./test.setup.exs",
         "test"
       ]

@@ -10,12 +10,8 @@ defmodule Dialyzer.Plt.Updater do
     changes = Plt.Manifest.changes(config)
     plt = Plt.Path.project_plt()
 
-    removed_files = changes[:files][:removed] ++ changes[:files][:changed]
-    added_files = changes[:files][:changed] ++ changes[:files][:added]
-
-    Plt.Command.remove(plt, removed_files)
-    Plt.Command.add(plt, added_files)
-    Plt.Command.check(plt)
+    _ = Plt.Command.remove(plt, changes[:files][:removed])
+    _ = Plt.Command.add(plt, changes[:files][:added])
 
     Plt.Manifest.update()
   end

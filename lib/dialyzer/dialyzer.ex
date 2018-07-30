@@ -1,4 +1,5 @@
 defmodule Dialyzer do
+  import Dialyzer.Logger
   alias Dialyzer.Config
 
   @spec run(Config.t()) :: String.t()
@@ -7,8 +8,12 @@ defmodule Dialyzer do
 
     config
     |> Config.to_erlang_format()
-    |> Kernel.++(check_plt: false)
-    |> :dialyzer.run()
-    |> Dialyzer.Warnings.format(config)
+    |> Dialyzer.Plt.Command.run()
+    |> case do
+      {:ok, warnings} ->
+        Dialyzer.Warnings.format(warnings, config)
+      {:error, msg} ->
+        error(":dialyzer.run error: #{msg}")
+    end
   end
 end

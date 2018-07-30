@@ -3,8 +3,7 @@ defmodule Dialyzer.Plt.Builder do
   require Logger
 
   @doc """
-  It builds incrementally all the plts and checks
-  for their consistency through dialyzer.
+  It builds incrementally all the plts.
   """
   @spec build(Config.t()) :: :ok
   def build(config) do
@@ -32,7 +31,6 @@ defmodule Dialyzer.Plt.Builder do
     included_apps = config.apps[:include]
 
     Project.dependencies()
-    |> Kernel.++(Project.applications())
     |> Kernel.++(elixir_apps())
     |> Enum.uniq()
     |> Kernel.++(included_apps)
@@ -40,14 +38,14 @@ defmodule Dialyzer.Plt.Builder do
     |> Enum.uniq()
   end
 
-  @spec build_plt(atom, Config.t()) :: :ok | :error
+  @spec build_plt(atom, Config.t()) :: {:ok, list} | {:error, any}
   defp build_plt(:erlang, _config) do
     path = Plt.Path.erlang_plt()
     apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
     prev_plt_apps = []
 
     ensure_dir_accessible!(path)
-    Plt.Command.new(path)
+    _ = Plt.Command.new(path)
     build_plt(path, apps, prev_plt_apps)
   end
 
@@ -78,9 +76,8 @@ defmodule Dialyzer.Plt.Builder do
     remove = MapSet.difference(prev_plt_files, plt_files)
     add = MapSet.difference(plt_files, prev_plt_files)
 
-    Plt.Command.remove(path, Enum.to_list(remove))
-    Plt.Command.add(path, Enum.to_list(add))
-    Plt.Command.check(path)
+    _ = Plt.Command.remove(path, Enum.to_list(remove))
+    _ = Plt.Command.add(path, Enum.to_list(add))
   end
 
   @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()

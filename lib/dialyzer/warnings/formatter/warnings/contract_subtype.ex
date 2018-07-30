@@ -26,8 +26,7 @@ defmodule Dialyzer.Formatter.Warnings.ContractSubtype do
     pretty_module = Erlex.pretty_print(module)
     pretty_signature = Erlex.pretty_print_contract(signature)
 
-    pretty_contract =
-      Erlex.pretty_print_contract(contract, module, function)
+    pretty_contract = Erlex.pretty_print_contract(contract, module, function)
 
     """
     The type in the @spec does not completely cover the types returned

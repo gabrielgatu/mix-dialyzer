@@ -15,7 +15,7 @@ defmodule Dialyzer.Plt.Manifest do
     cond do
       not File.exists?(path()) -> :missing
       Plt.missing_plts() != [] -> :missing
-      [files: [added: [], removed: [], changed: []]] == changes(config) -> :up_to_date
+      not files_changed?(config) -> :up_to_date
       true -> :outdated
     end
   end
@@ -154,5 +154,11 @@ defmodule Dialyzer.Plt.Manifest do
           mod.md5 != hash
       end
     end)
+  end
+
+  @spec files_changed?(Config.t()) :: boolean
+  defp files_changed?(config) do
+    changes = changes(config)
+    changes[:files][:added] != [] or changes[:files][:removed] != []
   end
 end

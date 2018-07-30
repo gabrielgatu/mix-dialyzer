@@ -14,11 +14,11 @@ defmodule Dialyzer.Plt do
   def ensure_loaded(config) do
     case Plt.Manifest.status(config) do
       :up_to_date ->
-        info("Plt's are all up to date")
+        info("Plt's are all up to date.")
         :ok
 
       :outdated ->
-        info("Updating outdated plts")
+        info("Updating outdated plts.")
         Plt.Updater.update(config)
         :ok
 

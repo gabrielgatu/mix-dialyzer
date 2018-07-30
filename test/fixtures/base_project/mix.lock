@@ -1,4 +1,5 @@
 %{
+  "erlex": {:hex, :erlex, "0.1.0", "4679cfef156cfb39ffc33e47dca23f848d7ecd7b30a15be93b7239045d29d7b2", [:mix], [], "hexpm"},
   "pane": {:hex, :pane, "0.3.0", "7b028e2aa8f004b62a965de983d824ad20d94f3c9c82b2bb4a9cdcebeb9e7060", [:mix], [], "hexpm"},
   "scribe": {:hex, :scribe, "0.8.0", "41ead349dc2f89b8f6b4596633f829340e7e5fcbee3e7eb3642fd031dd21142a", [:mix], [{:pane, "~> 0.2", [hex: :pane, repo: "hexpm", optional: false]}], "hexpm"},
 }

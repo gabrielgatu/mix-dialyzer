@@ -75,9 +75,7 @@ defmodule Dialyzer.Formatter.WarningHelpers do
     pretty_contract = Erlex.pretty_print_contract(contract)
 
     pretty_print_signature =
-      Erlex.pretty_print_contract(
-        "#{signature_args} -> #{signature_return}"
-      )
+      Erlex.pretty_print_contract("#{signature_args} -> #{signature_return}")
 
     """
     will never return since the success typing is:
