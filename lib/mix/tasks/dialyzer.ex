@@ -39,10 +39,20 @@ defmodule Mix.Tasks.Dialyzer do
     Mix.Project.compile([])
     _ = Application.ensure_all_started(:mix_dialyzer)
 
-    args
-    |> Dialyzer.CommandLine.Config.parse()
-    |> Dialyzer.Config.load()
+    config =
+      args
+      |> Dialyzer.CommandLine.Config.parse()
+      |> Dialyzer.Config.load()
+
+    config
     |> Dialyzer.run()
-    |> IO.puts()
+    |> case do
+      :ok ->
+        System.stop(0)
+
+      {:error, resp} ->
+        IO.puts(resp)
+        if config.cmd.halt_on_error, do: System.stop(1)
+    end
   end
 end

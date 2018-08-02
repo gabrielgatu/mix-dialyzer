@@ -2,6 +2,19 @@ defmodule Dialyzer.Warnings do
   alias Dialyzer.{Warning, Config.IgnoreWarning}
   import Dialyzer.Logger, only: [color: 2]
 
+  @doc """
+  It takes a list with all the warnings emitted directly from dialyzer and a
+  config struct (used to discard ignored warnings, and so on) and it returns
+  a formatted output ready to be printed out.
+
+  The output is composed by 5 main parts:
+  1: A header containing some general stats, like the number of warnings emitted/ignored
+  2: A table containing stats about warnings emitted
+  3: A footer containing some general informations for the user
+  4: The warnings found, formatted accordingly to the format specified by config
+  5: A list of all the warnings that have been ignored in `.dialyzer.exs` but
+     have not been found in the outputted version.
+  """
   @spec format(list(), Dialyzer.Config.t()) :: String.t()
   def format(warnings, config) do
     warnings = Enum.map(warnings, &Warning.new/1)

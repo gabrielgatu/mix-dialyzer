@@ -12,7 +12,7 @@ defmodule Dialyzer.Plt.DialyzerTest do
     test "it prints out the warnings when emitted" do
       in_project(:complex_project, fn ->
         config = Config.load()
-        output = Dialyzer.run(config)
+        {:error, output} = Dialyzer.run(config)
 
         assert String.contains?(output, "lib/mod.ex:5")
       end)
@@ -21,7 +21,7 @@ defmodule Dialyzer.Plt.DialyzerTest do
     test "it doesn't print a warning when ignored in .dialyzer.exs" do
       in_project(:complex_project, fn ->
         config = Config.load()
-        output = Dialyzer.run(config)
+        {:error, output} = Dialyzer.run(config)
 
         refute String.contains?(output, "lib/mod.ex:6")
       end)
