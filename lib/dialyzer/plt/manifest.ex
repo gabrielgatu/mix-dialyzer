@@ -129,7 +129,6 @@ defmodule Dialyzer.Plt.Manifest do
   @spec all_applications() :: [Plt.App.t()]
   defp all_applications do
     Project.dependencies()
-    |> Kernel.++(Project.applications())
     |> Enum.map(&Plt.App.info/1)
     |> Enum.filter(&(not is_nil(&1)))
   end
