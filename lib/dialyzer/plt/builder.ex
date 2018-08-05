@@ -1,4 +1,10 @@
 defmodule Dialyzer.Plt.Builder do
+  @moduledoc """
+  The builder is responsable for building a plt from zero,
+  by including all the necessary modules, and using pre-existing
+  plt to build over them and speed things up.
+  """
+
   alias Dialyzer.{Config, Project, Plt}
   require Logger
 

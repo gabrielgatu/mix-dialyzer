@@ -1,4 +1,11 @@
 defmodule Dialyzer.Warnings do
+  @moduledoc """
+  This is reponsable for formatting all warnings and generating
+  a nicely formatted output ready to be printed.
+
+  Read &format/1 for more reference on how the output is formatted.
+  """
+
   alias Dialyzer.{Warning, Config.IgnoreWarning}
   import Dialyzer.Logger, only: [color: 2]
 

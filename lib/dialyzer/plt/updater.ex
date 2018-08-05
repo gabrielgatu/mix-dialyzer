@@ -1,4 +1,9 @@
 defmodule Dialyzer.Plt.Updater do
+  @moduledoc """
+  This module is responsable for updating a plt, based on the changes
+  found by the manifest file.
+  """
+
   alias Dialyzer.{Config, Plt}
 
   @doc """

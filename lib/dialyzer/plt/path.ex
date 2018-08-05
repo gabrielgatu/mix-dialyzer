@@ -1,4 +1,11 @@
 defmodule Dialyzer.Plt.Path do
+  @moduledoc """
+  Utility module defining the path of the files used in
+  the analysis.
+
+  This files are: erlang/elixir/project plts and manifest file.
+  """
+
   @doc """
   Generates an absolute path for the project plt (going to include the elixir version,
   erlang, and deps). The path is referring to a location inside the build dir of the project,

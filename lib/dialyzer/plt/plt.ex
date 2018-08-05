@@ -1,4 +1,10 @@
 defmodule Dialyzer.Plt do
+  @moduledoc """
+  This is the main entry point when running an analysis,
+  it handles the dispatch to the correct function based on system
+  and plt status.
+  """
+
   alias Dialyzer.{Config, Plt}
   import Dialyzer.Logger
 

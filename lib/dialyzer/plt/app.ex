@@ -1,4 +1,12 @@
 defmodule Dialyzer.Plt.App do
+  @moduledoc """
+  It represents an OTP application. This is used as a "wrapper",
+  to group some informations used internally by `mix_dialyzer`.
+
+  Internally, it implements a caching system, this is because some
+  projects depend on the same applications, and we want to speed things up.
+  """
+
   defstruct [:app, :mods, :vsn]
 
   alias __MODULE__
@@ -50,6 +58,11 @@ defmodule Dialyzer.Plt.App do
 end
 
 defmodule Dialyzer.Plt.App.Module do
+  @moduledoc """
+  It represents a BEAM module. This is used as a "wrapper",
+  to group some informations used internally by `mix_dialyzer`.
+  """
+
   defstruct [:module, :filepath, :md5]
   alias __MODULE__
 

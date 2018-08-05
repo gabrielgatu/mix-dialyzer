@@ -1,4 +1,13 @@
 defmodule Dialyzer.Plt.Command do
+  @moduledoc """
+  Utility module containing all the necessary functions to
+  interact with a plt.
+
+  It takes care of logging to the user the operations
+  running, and converting to erlang types the parameters
+  (for example, erlang expects charlists instead of elixir strings).
+  """
+
   import Dialyzer.Logger
 
   @doc """

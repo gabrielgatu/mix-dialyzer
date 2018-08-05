@@ -1,4 +1,17 @@
 defmodule Dialyzer.Plt.Manifest do
+  @moduledoc """
+  The manifest is responsable for keeping track of all
+  the applications and modules included in the project plt.
+
+  The manifest is created the first time the `mix dialyzer` command is run.
+  Subsequently, after every other call, the manifest will be updated with the
+  latest changes, so that it is always in sync with the project.
+
+  When an application or a single module is added/removed,
+  the manifest is used to incrementally analyse the project, by
+  including/removing only the changed modules in the plt.
+  """
+
   alias Dialyzer.{Config, Plt, Project}
 
   @type manifest :: Keyword.t()
