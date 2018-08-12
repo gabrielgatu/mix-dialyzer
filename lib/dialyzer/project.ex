@@ -15,22 +15,6 @@ defmodule Dialyzer.Project do
   end
 
   @doc """
-  Return all the dependencies (direct or indirect) of this project.
-  """
-  @spec dependencies() :: [atom]
-  def dependencies do
-    # compile & load all deps paths
-    Mix.Tasks.Deps.Loadpaths.run([])
-    # compile & load current project paths
-    Mix.Project.compile([])
-
-    project_deps()
-    |> Enum.sort()
-    |> Enum.uniq()
-    |> Kernel.--(applications())
-  end
-
-  @doc """
   Return an array with the absolute paths for all the build paths of this project.
   Normally a single element will be returned, since most project just have the _build dir.
   """
@@ -51,70 +35,102 @@ defmodule Dialyzer.Project do
       [Mix.Project.compile_path() | acc]
     end
   end
+end
 
-  # Works by recursively analyzing all the deps of this project, as well
-  # as all the deps of deps, returning them as a list of application names.
-  @spec project_deps() :: [atom]
-  defp project_deps, do: project_deps([])
+defmodule Dialyzer.Project.DepedencyGraph do
+  alias __MODULE__
 
-  @spec project_deps([atom]) :: [atom]
-  defp project_deps(acc) do
-    if Mix.Project.umbrella?() do
-      children = Mix.Dep.Umbrella.loaded()
+  def sources(deps) do
+    deps
+    |> Enum.map(&:code.which/1)
+    |> Enum.filter(&(not is_atom(&1)))
+  end
 
-      Enum.reduce(children, acc, fn child, acc ->
-        Mix.Project.in_project(child.app, child.opts[:path], fn _ ->
-          project_deps(acc)
-        end)
-      end)
-    else
-      acc ++ project_core_deps() ++ project_transitive_deps()
+  def dependencies(app) do
+    case Application.spec(app) do
+      nil ->
+        mod_dependencies(app)
+
+      spec ->
+        mod_dependencies(List.first(spec[:modules]))
     end
   end
 
-  # Retrieve all the deps to the core elixir. Be careful: this will not return
-  # project imported dependencies, but just the deps required from the core elixir
-  # system, such as :kernel, :stdlib and so forth.
-  @spec project_core_deps() :: [atom]
-  defp project_core_deps() do
-    Mix.Project.config()
-    |> Keyword.get(:app)
-    |> project_core_deps()
+  def mod_dependencies(mod) do
+    case DepedencyGraph.Cache.get(mod) do
+      :error ->
+        {deps, visited} = calc_dependencies(mod)
+        deps = Enum.uniq(deps)
+        DepedencyGraph.Cache.save(mod, {deps, visited})
+        deps
+
+      {:ok, {deps, _visited}} ->
+        deps
+    end
   end
 
-  # Load each app and recursively build a list of all the core application deps
-  # For each app, log also to the user an error in case of incomplete dep list.
-  @spec project_core_deps(atom()) :: [atom]
-  defp project_core_deps(app) do
-    Application.load(app) |> log_app_load_issues(app)
-    Application.spec(app, :applications) |> find_project_core_deps()
+  def calc_dependencies(mod, visited \\ []) do
+    case DepedencyGraph.Cache.get(mod) do
+      :error ->
+        case module_references(mod) do
+          [] ->
+            {[], visited}
+
+          mods ->
+            mods
+            |> Enum.filter(&(&1 not in visited))
+            |> Enum.reduce({[], [mod | visited]}, fn ref_mod, {res, visited} ->
+              {deps, visited} = calc_dependencies(ref_mod, visited)
+              res = Enum.uniq([ref_mod | deps] ++ res)
+              {res, visited}
+            end)
+        end
+
+      {:ok, deps} ->
+        deps
+    end
   end
 
-  # In case of error during the loading of an app, sometimes the error is due an incomplete
-  # dependency list, then log it to the user.
-  # TODO: Improve this doc.
-  defp log_app_load_issues(:ok, _), do: nil
-  defp log_app_load_issues({:error, {:already_loaded, _}}, _), do: nil
+  def module_references(mod) do
+    try do
+      forms = :forms.read(mod)
 
-  defp log_app_load_issues({:error, err}, app),
-    do: IO.puts("Error loading #{app}, dependency list may be incomplete.\n #{err}")
+      calls =
+        :forms.filter(
+          fn
+            {:call, _, {:remote, _, {:atom, _, _}, _}, _} -> true
+            {:atom, _, <<>>} -> true
+            _ -> false
+          end,
+          forms
+        )
 
-  # Recursively reduce all applications found
-  # TODO: Improve this doc.
-  defp find_project_core_deps([]), do: []
-  defp find_project_core_deps(nil), do: []
+      modules = for {:call, _, {:remote, _, {:atom, _, module}, _}, _} <- calls, do: module
+      Enum.uniq(modules)
+    rescue
+      _ -> []
+    catch
+      _ -> []
+    end
+  end
+end
 
-  defp find_project_core_deps(apps) do
-    apps
-    |> Enum.map(&project_core_deps/1)
-    |> List.flatten()
-    |> Enum.concat(apps)
+defmodule Dialyzer.Project.DepedencyGraph.Cache do
+  use Agent
+
+  def start_link do
+    Agent.start_link(fn -> %{} end, name: __MODULE__)
   end
 
-  # Return a list of all the transitive dependencies this project has.
-  # This means direct and indirect dependencies (deps of deps).
-  @spec project_transitive_deps() :: [atom]
-  defp project_transitive_deps do
-    Mix.Project.deps_paths() |> Map.keys()
+  def get(mod) do
+    Agent.get(__MODULE__, fn state ->
+      Map.fetch(state, mod)
+    end)
+  end
+
+  def save(mod, deps) do
+    Agent.update(__MODULE__, fn state ->
+      Map.put(state, mod, deps)
+    end)
   end
 end

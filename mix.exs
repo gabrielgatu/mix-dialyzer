@@ -30,6 +30,7 @@ defmodule Dialyzer.MixProject do
     [
       {:erlex, "~> 0.1.0"},
       {:scribe, "~> 0.8"},
+      {:forms, "~> 0.0.1"},
       {:excoveralls, "~> 0.8", only: [:test]}
     ]
   end

@@ -31,7 +31,7 @@ defmodule Dialyzer.Plt do
       :missing ->
         info("Creating one or more missing plt.")
         Plt.Builder.build(config)
-        Plt.Manifest.update()
+        # Plt.Manifest.update()
         :ok
     end
   end

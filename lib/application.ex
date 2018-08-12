@@ -5,7 +5,8 @@ defmodule Dialyzer.Application do
     import Supervisor.Spec
 
     children = [
-      worker(Dialyzer.Plt.App.Cache, [])
+      worker(Dialyzer.Plt.App.Cache, []),
+      worker(Dialyzer.Project.DepedencyGraph.Cache, [])
     ]
 
     Supervisor.start_link(children, strategy: :one_for_one)

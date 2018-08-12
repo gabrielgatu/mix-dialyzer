@@ -48,12 +48,50 @@ defmodule Dialyzer.Plt.App do
   end
 
   @spec read_app_info(atom) :: t
-  defp read_app_info(app) do
+  def read_app_info(app) do
     info = Application.spec(app)
-    mods = Enum.map(info[:modules], &App.Module.new/1)
     vsn = info[:vsn]
+    mods =
+      info[:modules]
+      |> Enum.map(&dependencies/1)
+      |> List.flatten()
+      |> Enum.uniq()
+      |> IO.inspect()
+      # |> Enum.map(&App.Module.new/1)
 
     %App{app: app, mods: mods, vsn: vsn}
+  end
+
+  def dependencies(mod), do: dependencies(mod, [])
+  def dependencies([], acc), do: acc
+  def dependencies(mod, acc) do
+    for mod_ref <- module_references(mod),
+        mod_ref not in acc do
+      IO.inspect(mod)
+      dependencies(mod_ref, [mod | acc])
+    end
+  end
+
+  def module_references(mod) do
+    try do
+      forms = :forms.read(mod)
+
+      calls =
+        :forms.filter(
+          fn
+            {:call, _, {:remote, _, {:atom, _, _}, _}, _} -> true
+            _ -> false
+          end,
+          forms
+        )
+
+      modules = for {:call, _, {:remote, _, {:atom, _, module}, _}, _} <- calls, do: module
+      Enum.uniq(modules)
+    rescue
+      _ -> []
+    catch
+      _ -> []
+    end
   end
 end
 

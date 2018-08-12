@@ -36,9 +36,7 @@ defmodule Dialyzer.Plt.Builder do
     removed_apps = config.apps[:remove]
     included_apps = config.apps[:include]
 
-    Project.dependencies()
-    |> Kernel.++(elixir_apps())
-    |> Enum.uniq()
+    Project.applications()
     |> Kernel.++(included_apps)
     |> Kernel.--(removed_apps)
     |> Enum.uniq()
@@ -47,54 +45,40 @@ defmodule Dialyzer.Plt.Builder do
   @spec build_plt(atom, Config.t()) :: {:ok, list} | {:error, any}
   defp build_plt(:erlang, _config) do
     path = Plt.Path.erlang_plt()
-    apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
-    prev_plt_apps = []
+    files = retrieve_all_files_used_in_apps(erlang_apps())
 
     ensure_dir_accessible!(path)
     _ = Plt.Command.new(path)
-    build_plt(path, apps, prev_plt_apps)
+    build_plt(path, files)
   end
 
   defp build_plt(:elixir, _config) do
     path = Plt.Path.elixir_plt()
-    apps = elixir_apps() |> Enum.map(&Plt.App.info/1)
-    prev_plt_apps = erlang_apps() |> Enum.map(&Plt.App.info/1)
+    files = retrieve_all_files_used_in_apps(elixir_apps())
 
     Plt.Command.copy(Plt.Path.erlang_plt(), path)
-    build_plt(path, apps, prev_plt_apps)
+    build_plt(path, files)
   end
 
   defp build_plt(:project, config) do
     path = Plt.Path.project_plt()
-    apps = project_apps(config) |> Enum.map(&Plt.App.info/1) |> Enum.filter(&(&1 != nil))
-    prev_plt_apps = elixir_apps() |> Enum.map(&Plt.App.info/1)
+    files = retrieve_all_files_used_in_apps(project_apps(config))
 
     Plt.Command.copy(Plt.Path.elixir_plt(), path)
-    build_plt(path, apps, prev_plt_apps)
+    build_plt(path, files)
   end
 
-  defp build_plt(path, apps, prev_plt_apps) do
+  defp build_plt(path, files) do
     ensure_dir_accessible!(path)
-
-    plt_files = collect_files_from_apps(apps)
-    prev_plt_files = collect_files_from_apps(prev_plt_apps)
-
-    remove = MapSet.difference(prev_plt_files, plt_files)
-    add = MapSet.difference(plt_files, prev_plt_files)
-
-    _ = Plt.Command.remove(path, Enum.to_list(remove))
-    _ = Plt.Command.add(path, Enum.to_list(add))
+    _ = Plt.Command.add(path, Enum.to_list(files))
   end
 
-  @spec collect_files_from_apps([Plt.App.t()]) :: MapSet.t()
-  defp collect_files_from_apps(apps) do
-    Enum.flat_map(apps, fn app ->
-      app
-      |> Map.fetch!(:mods)
-      |> Enum.map(& &1.filepath)
-      |> Enum.filter(&(not is_atom(&1)))
-    end)
-    |> MapSet.new()
+  defp retrieve_all_files_used_in_apps(apps) do
+    apps
+    |> Enum.map(&Dialyzer.Project.DepedencyGraph.dependencies/1)
+    |> List.flatten()
+    |> Enum.uniq()
+    |> Dialyzer.Project.DepedencyGraph.sources()
   end
 
   @spec ensure_dir_accessible!(String.t()) :: :ok | :error
